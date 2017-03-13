@@ -44,7 +44,7 @@ class User extends CActiveRecord
 		return array(
 			array('first_name, last_name, address1, province, city, contact_number, tin', 'required'),
 			array('business_type_id, business_category, business_name', 'required', 'on'=>'createNewBorrower'),
-			array('business_type_id, contact_number', 'numerical', 'integerOnly'=>true),
+			array('business_type_id, contact_number, dti_file_id, sec_file_id', 'numerical', 'integerOnly'=>true),
 			array('account_id', 'length', 'max'=>11),
 			array('id_name, first_name, middle_name, last_name, province, city, business_name', 'length', 'max'=>64),
 			array('address1, address2', 'length', 'max'=>128),
@@ -142,6 +142,26 @@ class User extends CActiveRecord
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
+	}
+
+	public function addDtiFile(array $dti_file)
+	{
+		$filehandler = new ImageFileHandler($dti_file, ImageFileHandler::DOCUMENT_FILES, $this->account_id);
+		
+		if($filehandler->saveUpload())
+			$this->dti_file_id = $filehandler->_id;
+
+		return $this->dti_file_id;
+	}
+
+	public function addSecFile(array $sec_file)
+	{
+		$filehandler = new ImageFileHandler($sec_file, ImageFileHandler::DOCUMENT_FILES, $this->account_id);
+		
+		if($filehandler->saveUpload())
+			$this->sec_file_id = $filehandler->_id;
+
+		return $this->sec_file_id;
 	}
 
 	public function addSupportedDocuments(array $document_files)

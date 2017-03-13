@@ -129,68 +129,69 @@
   </div>
   <?php endif; ?>
 
-  <?php if($type != "B"): ?> <label>Supporting Documents</label> <?php endif; ?>
+  <?php if ($type == "B"): ?>
   <div class="form-group has-feedback">
-    <?php if($type == "B"): ?> <label>DTI File *</label> <?php endif; ?>
-    <input type="file" name="supporting_documents[0]" class="file">
+    <label>DTI File *</label>
+    <input type="file" name="dti_file" class="file">
     <div class="input-group col-xs-12">
       <span class="input-group-btn">
         <button class="browse btn btn-default" type="button"><i class="glyphicon glyphicon-plus"></i> Select File </button>
       </span>
       <input type="text" class="form-control filename-upload-container" disabled placeholder="No file selected..">
     </div>
+    <?php echo $form->error($user,'dti_file_id', array('class'=>'text-red')); ?>
   </div>
 
   <div class="form-group has-feedback">
-    <?php if($type == "B"): ?> <label>SEC File *</label> <?php endif; ?>
-    <input type="file" name="supporting_documents[1]" class="file">
+    <label>SEC File *</label>
+    <input type="file" name="sec_file" class="file">
     <div class="input-group col-xs-12">
       <span class="input-group-btn">
         <button class="browse btn btn-default" type="button"><i class="glyphicon glyphicon-plus"></i> Select File </button>
       </span>
       <input type="text" class="form-control filename-upload-container" disabled placeholder="No file selected..">
     </div>
+    <?php echo $form->error($user,'sec_file_id', array('class'=>'text-red')); ?>
   </div>
 
-  <?php if($type == "B"): ?> <label>Supporting Documents</label> <?php endif; ?>
-  <div class="form-group has-feedback">
-    <input type="file" name="supporting_documents[2]" class="file">
-    <div class="input-group col-xs-12">
-      <span class="input-group-btn">
-        <button class="browse btn btn-default" type="button"><i class="glyphicon glyphicon-plus"></i> Select File </button>
-      </span>
-      <input type="text" class="form-control filename-upload-container" disabled placeholder="No file selected..">
-    </div>
-  </div>
-
-  <div class="form-group has-feedback">
-    <input type="file" name="supporting_documents[3]" class="file">
-    <div class="input-group col-xs-12">
-      <span class="input-group-btn">
-        <button class="browse btn btn-default" type="button"><i class="glyphicon glyphicon-plus"></i> Select File </button>
-      </span>
-      <input type="text" class="form-control filename-upload-container" disabled placeholder="No file selected..">
-    </div>
-  </div>
-
-  <div class="form-group has-feedback">
-    <input type="file" name="supporting_documents[4]" class="file">
-    <div class="input-group col-xs-12">
-      <span class="input-group-btn">
-        <button class="browse btn btn-default" type="button"><i class="glyphicon glyphicon-plus"></i> Select File </button>
-      </span>
-      <input type="text" class="form-control filename-upload-container" disabled placeholder="No file selected..">
-    </div>
-  </div>
+  <label>Other Supporting Documents</label>
+    <?php for($x=0; $x < 3; $x++): ?>
+      <div class="form-group has-feedback">
+        <input type="file" name="supporting_documents[<?= $x; ?>]" class="file">
+        <div class="input-group col-xs-12">
+          <span class="input-group-btn">
+            <button class="browse btn btn-default" type="button"><i class="glyphicon glyphicon-plus"></i> Select File </button>
+          </span>
+          <input type="text" class="form-control filename-upload-container" disabled placeholder="No file selected..">
+        </div>
+      </div>
+    <?php endfor; ?>
+  <?php else: ?>
+  <label>Supporting Documents</label>
+    <?php for($x=0; $x < 5; $x++): ?>
+      <div class="form-group has-feedback">
+        <input type="file" name="supporting_documents[<?= $x; ?>]" class="file">
+        <div class="input-group col-xs-12">
+          <span class="input-group-btn">
+            <button class="browse btn btn-default" type="button"><i class="glyphicon glyphicon-plus"></i> Select File </button>
+          </span>
+          <input type="text" class="form-control filename-upload-container" disabled placeholder="No file selected..">
+        </div>
+      </div>
+    <?php endfor; ?>
+  <?php endif; ?>
 
   <div class="form-group has-feedback">
     <p class="text-muted">
-      <small><strong>NOTE:</strong> <br />
-        <em>* File/s must only be in PDF or JPEG format.</em> <br />
+      <small><strong>NOTE:</strong> 
+      <?php if($type == "B"): ?>
+        <em>* File/s must only be in PDF or JPEG format.</em>
+      <?php else: ?>
+        <br /><em>* File/s must only be in PDF or JPEG format.</em> <br />
         <em>* At least <strong>2 files</strong> must be uploaded.</em>
+      <?php endif; ?>
       </small>
     </p>
-    <br />
   </div>
 
   <div class="row">
@@ -225,6 +226,7 @@ $(document).ready(function() {
 
   var business_category = $('#User_business_category').val();
   var business_type = "<?php echo $user->business_type_id; ?>";
+  var account_type = "<?= $type; ?>"
 
   if (business_category) {
     $.ajax({
@@ -249,7 +251,7 @@ $(document).ready(function() {
       }
     });
 
-    if(loaded_files < 2) {
+    if(account_type != 'B' && loaded_files < 2) {
       alert('Minimum of 2 document files must be uploaded.');
       event.preventDefault();
     } else {

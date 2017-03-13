@@ -65,19 +65,30 @@ class SiteController extends Controller
 				$valid = $user->validate() && $valid;
 
 				$document_files = (isset($_FILES['supporting_documents'])) ? $this->rearrangeFiles($_FILES['supporting_documents']) : [];
-				$file_min_reached = false;
+				$valid_files_loaded = false;
 
-				if(!empty($_FILES) && count($document_files) >= 2) {
-					$file_min_reached = true;
+				if($type == "B") {
+					if($this->validateFileInput('dti_file',$_FILES) && $this->validateFileInput('sec_file',$_FILES)) {
+						$valid_files_loaded = true;
+					}
+				} else {
+					if(!empty($_FILES) && count($document_files) >= 2) {
+						$valid_files_loaded = true;
+					}
 				}
 
-				if ($valid && $file_min_reached) {
+				if ($valid && $valid_files_loaded) {
 					$transaction = Yii::app()->db->beginTransaction();
 
 					try {
 						if ($account->save()) {
 							$user->account_id = $account->id;
 							$user->id_name = $id_name.$account->id;
+
+							if($type == "B") {
+								$user->addDtiFile($_FILES['dti_file']);
+								$user->addSecFile($_FILES['sec_file']);
+							}
 							$user->addSupportedDocuments($document_files);
 
 							if ($user->save()) {	
@@ -94,7 +105,19 @@ class SiteController extends Controller
 				} else {
 					$error_msg = '<ul>';
 					if(!$valid) $error_msg .= '<li> Validation Failed! Please double check required fields. </li>';
-					if(!$file_min_reached) $error_msg .= '<li> Minimum of 2 document files must be uploaded. </li>';
+					
+					if(!$valid_files_loaded) {
+						if($type == "B") {
+							if(!$this->validateFileInput('dti_file',$_FILES))
+								$error_msg .= '<li> DTI File is required. </li>';
+
+							if(!$this->validateFileInput('sec_file',$_FILES))
+								$error_msg .= '<li> SEC File is required. </li>';
+						} else {
+							$error_msg .= '<li> Minimum of 2 document files must be uploaded. </li>';
+						}
+					} 
+						
 					$error_msg .= '</ul>';
 					Yii::app()->user->setFlash('error', $error_msg);
 				}

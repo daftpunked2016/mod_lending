@@ -19,4 +19,9 @@ trait BasicHelper
 	    
 	    return $new_file_arr;
 	}
+
+	function validateFileInput($input_name, array $file_list)
+	{
+		return (isset($file_list[$input_name]) && $file_list[$input_name]['error'] == 0);
+	}
 }
