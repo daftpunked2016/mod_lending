@@ -30,7 +30,7 @@
 <body class="hold-transition register-page">
 <div class="register-box">
   <div class="register-logo">
-    <?php echo CHtml::link('<b>'.Yii::app()->name.'</b>', array('site/login')); ?>
+    <?php echo CHtml::link('<b>'.Yii::app()->name.'</b>', array('site/index')); ?>
   </div>
 
   <div class="register-box-body">

@@ -112,10 +112,10 @@
 						'template' => "{sorter}
 						<table id=\"example1\" class=\"table table-bordered table-hover\">
 							<thead class='panel-heading'>
+								<th>System ID</th>
 								<th>Type of Business</th>
 								<th>Name</th>
 								<th>Contact Number</th>
-								<th>System ID</th>
 								<th>Status</th>
 								<th class='text-center' width='15%'>Actions</th>
 							</thead>
@@ -135,9 +135,9 @@
 						'template' => "{sorter}
 						<table id=\"example1\" class=\"table table-bordered table-hover\">
 							<thead class='panel-heading'>
+								<th>System ID</th>
 								<th>Name</th>
 								<th>Contact Number</th>
-								<th>System ID</th>
 								<th>Status</th>
 								<th class='text-center' width='15%'>Actions</th>
 							</thead>
@@ -153,6 +153,16 @@
 		</div>
 	</div>
 </section>
+
+<!-- Large modal -->
+
+<div id="view-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content" id="modal-content">
+    	<!-- start content here -->
+    </div>
+  </div>
+</div>
 
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -231,6 +241,20 @@
 					$('#filter_bus_type').html(response);
 				}
 			});
+		});
+
+		$(document).on('click', '.view-account', function() {
+			var url = $(this).data('url');
+
+			$.ajax({
+				url: url,
+				beforeSend: function() {
+					$("#modal-content").html("Loading...");
+				},
+				success: function(response) {
+					$("#modal-content").html(response);
+				}
+			})
 		});
 	});
 </script>

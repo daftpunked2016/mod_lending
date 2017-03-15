@@ -14,9 +14,4 @@ $(function() {
     $('.navbar-collapse a').click(function(){
         $(".navbar-collapse").collapse('hide');
     });
-
-    $('#login').click(function() {
-        var url = $(this).data('target');
-        window.location = url;
-    });
 })

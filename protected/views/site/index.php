@@ -17,7 +17,7 @@
 <!-- end home -->
 
 <!-- start divider -->
-<section id="divider">
+<!-- <section id="divider">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-4 wow fadeInUp templatemo-box" data-wow-delay="0.3s">
@@ -37,7 +37,7 @@
 			</div>
 		</div>
 	</div>
-</section>
+</section> -->
 <!-- end divider -->
 
 <!-- start feature -->
@@ -81,56 +81,27 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12 wow bounceIn">
-				<h2 class="text-uppercase">Our Pricing</h2>
+				<h2 class="text-uppercase">Our Packages</h2>
 			</div>
-			<div class="col-md-4 wow fadeIn" data-wow-delay="0.6s">
-				<div class="pricing text-uppercase">
-					<div class="pricing-title">
-						<h4>Basic Plan</h4>
-						<p>$11</p>
-						<small class="text-lowercase">monthly</small>
+			<?php foreach ($packages as $data): ?>
+				<div class="col-md-4 wow fadeIn" data-wow-delay="0.6s">
+					<div class="pricing <?php if ($data->id == 2): ?>active<?php endif; ?> text-uppercase">
+						<div class="pricing-title">
+							<h4>Package <?php echo $data->id; ?></h4>
+							<p>P <?php echo number_format($data->amount, 2); ?></p>
+							<!-- <small class="text-lowercase">monthly</small> -->
+						</div>
+						<ul>
+							<li><?php echo $data->interest_rate; ?>% Interest rate</li>
+							<li><?php echo $data->months_payable; ?> Months to pay</li>
+							<!-- <li>60 More Themes</li> -->
+							<!-- <li>Lifetime Support</li> -->
+						</ul>
+						<?php echo CHtml::link('Sign up', array('site/register'), array('class'=>'btn btn-primary text-uppercase')) ?>
 					</div>
-					<ul>
-						<li>6 GB Space</li>
-						<li>600 GB Bandwidth</li>
-						<li>60 More Themes</li>
-						<li>Lifetime Support</li>
-					</ul>
-					<button class="btn btn-primary text-uppercase">Sign up</button>
 				</div>
-			</div>
-			<div class="col-md-4 wow fadeIn" data-wow-delay="0.6s">
-				<div class="pricing active text-uppercase">
-					<div class="pricing-title">
-						<h4>Business Plan</h4>
-						<p>$22</p>
-						<small class="text-lowercase">monthly</small>
-					</div>
-					<ul>
-						<li>15 GB space</li>
-						<li>1,500 GB Bandwidth</li>
-						<li>150 More Themes</li>
-						<li>Lifetime Support</li>
-					</ul>
-					<button class="btn btn-primary text-uppercase">Sign up</button>
-				</div>
-			</div>
-			<div class="col-md-4 wow fadeIn" data-wow-delay="0.6s">
-				<div class="pricing text-uppercase">
-					<div class="pricing-title">
-						<h4>Pro Plan</h4>
-						<p>$33</p>
-						<small class="text-lowercase">monthly</small>
-					</div>
-					<ul>
-						<li>35 GB space</li>
-						<li>3,500 GB bandwidth</li>
-						<li>350 more themes</li>
-						<li>Lifetime Support</li>
-					</ul>
-					<button class="btn btn-primary text-uppercase">Sign Up</button>
-				</div>
-			</div>
+			<?php endforeach; ?>
+
 		</div>
 	</div>
 </section>

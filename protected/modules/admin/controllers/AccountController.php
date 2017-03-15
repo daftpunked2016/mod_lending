@@ -261,4 +261,65 @@ class AccountController extends Controller
 			}
 		}
 	}
+
+	public function actionView($id)
+	{
+		$account = Account::model()->findByPk($id);
+
+		$supporting_documents = FileUploads::model()->findAll(array('condition'=>'account_id = :aid', 'params'=>array(':aid'=>$account->id)));
+
+		foreach ($supporting_documents as $key => $value) {
+			$supporting_documents[$key]->file_path = $this->create_path($account->id, $value->filename);
+		}
+
+		$this->renderPartial('view', array(
+			'account' => $account,
+			'user' => $account->user,
+			'supporting_documents' => $supporting_documents
+		));
+	}
+
+	public function actionSettings()
+	{
+		$account = Account::model()->findByPk(Yii::app()->getModule('admin')->user->id);
+
+		if (isset($_POST['Account']) && isset($_POST['User'])) {
+			$account->attributes = $_POST['Account'];
+			$account->user->attributes = $_POST['User'];
+
+			$valid = $account->validate();
+			$valid = $account->user->validate() && $valid;
+
+			if ($valid) {
+				$transaction = Yii::app()->db->beginTransaction();
+
+				try {
+					if ($account->save()) {
+						if ($user->save()) {
+							$transaction->commit();
+							Yii::app()->user->setFlash('success', 'Update Account Successful!');
+							$this->redirect(array('account/settings'));
+						}
+					}
+				} catch (Exception $e) {
+					$transaction->rollback();
+					Yii::app()->user->setFlash('error', 'Update Account Failed!');
+					$this->redirect(array('account/settings'));
+				}
+			} else {
+				Yii::app()->user->setFlash('error', 'Validation failed. Please try again.');
+			}
+		}
+
+		$this->render('settings', array(
+			'account' => $account,
+			'user' => $account->user
+		));
+	}
+
+	#Function accepts 2 parameters
+	public function create_path($account_id, $filename)
+	{
+		return Yii::app()->baseUrl.'/uploads/regfiles/'.$account_id.'/'.$filename;
+	}
 }

@@ -1,7 +1,7 @@
 <footer>
   <div class="container">
     <div class="row">
-      <p>Copyright © 2084 Your Company Name</p>
+      <p>Copyright © <?php echo date('Y'); ?> <?php echo Yii::app()->name; ?></p>
     </div>
   </div>
 </footer>

@@ -6,16 +6,17 @@
         <span class="icon icon-bar"></span>
         <span class="icon icon-bar"></span>
       </button>
-      <a href="#home" class="navbar-brand">Boxer</a>
+      <!-- <a href="#home" class="navbar-brand">Chan Robles Capital</a> -->
+      <?php echo CHtml::link('Chan Robles Capital', array('site/index'), array('class'=>'navbar-brand', 'id'=>'business_name')); ?>
     </div>
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav navbar-right text-uppercase">
         <li><a href="#home">Home</a></li>
         <li><a href="#feature">Features</a></li>
-        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#pricing">Packages</a></li>
         <li><a href="#download">Download</a></li>
         <li><a href="#contact">Contact</a></li>
-        <li id="login" data-target="<?php echo Yii::app()->createUrl('site/login'); ?>">
+        <li id="login">
           <?php echo CHtml::link('Login', array('site/login')); ?>
         </li>
       </ul>

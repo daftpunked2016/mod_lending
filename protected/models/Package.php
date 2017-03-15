@@ -1,27 +1,22 @@
 <?php
 
 /**
- * This is the model class for table "file_uploads".
+ * This is the model class for table "package".
  *
- * The followings are the available columns in table 'file_uploads':
+ * The followings are the available columns in table 'package':
  * @property integer $id
- * @property integer $account_id
- * @property string $original_filename
- * @property string $filename
- * @property string $file_extension
- * @property string $type
- * @property string $date_uploaded
+ * @property string $amount
+ * @property integer $interest_rate
+ * @property integer $months_payable
  */
-class FileUploads extends CActiveRecord
+class Package extends CActiveRecord
 {
-	public $file_path;
-	
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'file_uploads';
+		return 'package';
 	}
 
 	/**
@@ -32,14 +27,12 @@ class FileUploads extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('account_id, original_filename, filename, file_extension, type', 'required'),
-			array('account_id', 'numerical', 'integerOnly'=>true),
-			array('original_filename, filename', 'length', 'max'=>255),
-			array('file_extension', 'length', 'max'=>10),
-			array('type', 'length', 'max'=>1),
+			array('amount, interest_rate, months_payable', 'required'),
+			array('interest_rate, months_payable', 'numerical', 'integerOnly'=>true),
+			array('amount', 'length', 'max'=>128),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, account_id, original_filename, filename, file_extension, type, date_uploaded', 'safe', 'on'=>'search'),
+			array('id, amount, interest_rate, months_payable', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -61,12 +54,9 @@ class FileUploads extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'account_id' => 'Account',
-			'original_filename' => 'Original Filename',
-			'filename' => 'Filename',
-			'file_extension' => 'File Extension',
-			'type' => 'Type',
-			'date_uploaded' => 'Date Uploaded',
+			'amount' => 'Amount',
+			'interest_rate' => 'Interest Rate (%)',
+			'months_payable' => 'Months Payable',
 		);
 	}
 
@@ -89,12 +79,9 @@ class FileUploads extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('account_id',$this->account_id);
-		$criteria->compare('original_filename',$this->original_filename,true);
-		$criteria->compare('filename',$this->filename,true);
-		$criteria->compare('file_extension',$this->file_extension,true);
-		$criteria->compare('type',$this->type,true);
-		$criteria->compare('date_uploaded',$this->date_uploaded,true);
+		$criteria->compare('amount',$this->amount,true);
+		$criteria->compare('interest_rate',$this->interest_rate);
+		$criteria->compare('months_payable',$this->months_payable);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -105,7 +92,7 @@ class FileUploads extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return FileUploads the static model class
+	 * @return Package the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

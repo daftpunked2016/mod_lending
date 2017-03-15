@@ -31,7 +31,11 @@ class SiteController extends Controller
 	{
 		// renders the view file 'protected/views/site/index.php'
 		// using the default layout 'protected/views/layouts/main.php'
-		$this->render('index');
+		$packages = Package::model()->findAll();
+
+		$this->render('index', array(
+			'packages' => $packages
+		));
 	}
 
 	public function actionRegister($type = null)

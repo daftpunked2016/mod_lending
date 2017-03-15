@@ -76,6 +76,9 @@
       <li id="content_management" class="">
         <?php echo CHtml::link('<i class="fa fa-file text-red"></i> <span>Content Management</span>', array('content/index')); ?>
       </li>
+      <li id="package" class="">
+        <?php echo CHtml::link('<i class="fa fa-folder-open text-red"></i> <span>Packages</span>', array('package/index')); ?>
+      </li>
       <li id="mailbox" class="">
         <?php echo CHtml::link('<i class="fa fa-envelope text-red"></i> <span>Mailbox</span>', array('message/index', 'folder'=>'inbox')); ?>
       </li>

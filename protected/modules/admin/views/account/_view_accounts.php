@@ -1,4 +1,7 @@
 <tr id="<?php echo $data->id; ?>">
+	<td>
+		<?php echo CHtml::encode($data->user->id_name); ?>
+	</td>
 	<!-- borrowers -->
 	<?php if ($data->account_type == "B"): ?>
 		<td>
@@ -10,9 +13,6 @@
 	</td>
 	<td>
 		<?php echo CHtml::encode($data->user->contact_number); ?>
-	</td>
-	<td>
-		<?php echo CHtml::encode($data->user->id_name); ?>
 	</td>
 	<td>
 		<?php
@@ -40,11 +40,11 @@
           </button>
           <ul class="dropdown-menu pull-right" role="menu">
             <li>
-            	<?php echo CHtml::link('<span class="fa fa-search"></span> View'); ?>
+            	<?php echo CHtml::link('<span class="fa fa-search"></span> View', 'javascript:void(0);', array('class'=>'view-account', 'data-toggle'=>'modal', 'data-target'=>'.bs-example-modal-lg', 'data-url'=>Yii::app()->createUrl('admin/account/view', array('id'=>$data->id)))); ?>
             </li>
-            <li>
-            	<?php echo CHtml::link('<span class="fa fa-edit"></span> Edit', array('account/edit', 'id'=>$data->id), array('title'=>'Edit Account')); ?>
-            </li>
+            <!-- <li>
+            	<?php //echo CHtml::link('<span class="fa fa-edit"></span> Edit', array('account/edit', 'id'=>$data->id), array('title'=>'Edit Account')); ?>
+            </li> -->
             <li class="divider"></li>
             <li>
 	            <?php

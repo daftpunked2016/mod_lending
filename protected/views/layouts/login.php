@@ -27,7 +27,7 @@
 <body class="hold-transition login-page">
 <div class="login-box">
   <div class="login-logo">
-    <?php echo CHtml::link('<b>'.Yii::app()->name.'</b>', array('site/login')); ?>
+    <?php echo CHtml::link('<b>'.Yii::app()->name.'</b>', array('site/index')); ?>
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
