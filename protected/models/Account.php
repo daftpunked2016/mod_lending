@@ -47,15 +47,17 @@ class Account extends CActiveRecord
 			array('username', 'email'),
 			array('username', 'validateNewUsername', 'on' => 'createNewAccount'),
 			array('username', 'validateNewUsername', 'on' => 'updateAccount'),
+			array('username', 'validateAdminNewUsername', 'on' => 'updateAdminAccount'),
 
 			array('password, confirm_password', 'required', 'on' => 'createNewAccount'),
-			array('current_password, new_password, confirm_password', 'required', 'on' => 'changePwd'),
+			array('current_password, new_password, confirm_password', 'required', 'on' => 'changePwd, changeAdminPwd'),
 			array('current_password', 'findPasswords', 'on' => 'changePwd'),
-			array('confirm_password', 'compare', 'compareAttribute'=>'new_password', 'message'=>'New password doesn\'t match!', 'on'=>'changePwd'),
+			array('current_password', 'findAdminPasswords', 'on' => 'changeAdminPwd'),
+			array('confirm_password', 'compare', 'compareAttribute'=>'new_password', 'message'=>'New password doesn\'t match!', 'on'=>'changePwd, changeAdminPwd'),
 			array('confirm_password', 'compare', 'compareAttribute'=>'password', 'message'=>'Passwords doesn\'t match!', 'on'=>'createNewAccount'),
 			
 			array('password', 'length', 'min'=>8, 'max'=>16, 'on'=>'createNewAccount'),
-			array('new_password, confirm_password', 'length', 'min'=>8, 'max'=>16, 'on'=>'changePwd'),
+			array('new_password, confirm_password', 'length', 'min'=>8, 'max'=>16, 'on'=>'changePwd, changeAdminPwd'),
 			array('username', 'length', 'max'=>40),
 
 			// array('account_type, username, password, salt, date_created', 'required'),
@@ -221,7 +223,7 @@ class Account extends CActiveRecord
 		return sha1($password.$salt);
 	}
 
-	public function validateNewUsername($attribute,$params)
+	public function validateNewUsername($attribute, $params)
 	{
 		$id = Yii::app()->user->id;		
 
@@ -243,7 +245,37 @@ class Account extends CActiveRecord
 					
 					if($account !== null) {
 						if($account->username !== $account2->username) {
-							$this->addError('username','Email address is already in use.');
+							$this->addError($attribute,'Email address is already in use.');
+						}
+					}
+				}
+			}
+		}
+	}
+
+	public function validateAdminNewUsername($attribute, $params)
+	{
+		$id = Yii::app()->getModule('admin')->user->id;		
+
+		if ($this->username != "") {
+
+			if (!$this->hasErrors()) {
+
+				if(!filter_var($this->username,FILTER_VALIDATE_EMAIL)) {
+					$this->addError('username','Please use a valid email address.');
+				} else {
+					$account=Account::model()->find(array(
+						'condition'=>'username=:username',
+						'params'=>array(
+							':username'=>$this->username
+						)
+					));
+
+					$account2 = Account::model()->findByPk($id);
+					
+					if($account !== null) {
+						if($account->username !== $account2->username) {
+							$this->addError($attribute,'Email address is already in use.');
 						}
 					}
 				}
@@ -254,6 +286,15 @@ class Account extends CActiveRecord
 	public function findPasswords($attribute, $params)
     {
         $account= Account::model()->findByPk(Yii::app()->user->id);
+
+        if (!$this->validatePassword($this->current_password)) {
+        	$this->addError($attribute, 'Old password is Incorrect.');
+        }
+    }
+
+    public function findAdminPasswords($attribute, $params)
+    {
+        $account= Account::model()->findByPk(Yii::app()->getModule('admin')->user->id);
 
         if (!$this->validatePassword($this->current_password)) {
         	$this->addError($attribute, 'Old password is Incorrect.');

@@ -26,7 +26,7 @@ class UserIdentity extends CUserIdentity
 
 		if (empty($account)) {
 			Yii::app()->user->setFlash('error', 'Invalid Account or Account not yet Registered.');
-		} else {
+		} else if ($account->validatePassword($this->password)) {
 			switch ($account->status) {
 				case 'P':
 					Yii::app()->user->setFlash('error', 'Pending Account. Please wait for the Approval of System Administrator before you can logged in your account.');
@@ -43,6 +43,8 @@ class UserIdentity extends CUserIdentity
 					Yii::app()->user->setFlash('error', 'Rejected Account. Please contact System Administrator.');
 					break;
 			}
+		} else {
+			Yii::app()->user->setFlash('error', 'Username or Password is incorrect.');
 		}
 		
         return $this->errorCode == self::ERROR_NONE;

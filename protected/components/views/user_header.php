@@ -2,9 +2,9 @@
     <!-- Logo -->
     <a href="<?php echo Yii::app()->createUrl('account/dashboard'); ?>" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>1</b>23</span>
+      <span class="logo-mini"><b>CR</b>L</span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>Lending</b>Site</span>
+      <span class="logo-lg"><b>ChanRobles</b>Lending</span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top" role="navigation">
@@ -47,10 +47,10 @@
               </li> -->
               <!-- Menu Footer-->
               <li class="user-footer">
-                <!-- <div class="pull-left">
-                  <a href="#" class="btn btn-default btn-flat">Profile</a>
-                </div> -->
-                <div class="text-center">
+                <div class="pull-left">
+                  <?php echo CHtml::link('Profile', array('account/settings'), array('class'=>'btn btn-default btn-flat')); ?>
+                </div>
+                <div class="pull-right">
                   <!-- <a href="#" class="btn btn-default btn-flat">Sign out</a> -->
                   <?php echo CHtml::link('Sign Out', array('site/logout'),array('class'=>'btn btn-default btn-flat')); ?>
                 </div>
