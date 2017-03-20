@@ -1,24 +1,23 @@
 <?php
 
 /**
- * This is the model class for table "package".
+ * This is the model class for table "loan".
  *
- * The followings are the available columns in table 'package':
- * @property integer $id
- * @property string $amount
- * @property integer $interest_rate
- * @property integer $months_payable
+ * The followings are the available columns in table 'loan':
+ * @property string $id
+ * @property integer $account_id
+ * @property integer $package_id
+ * @property string $status
+ * @property string $date_created
  */
-class Package extends CActiveRecord
+class Loan extends CActiveRecord
 {
-	public $class;
-	
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'package';
+		return 'loan';
 	}
 
 	/**
@@ -29,12 +28,12 @@ class Package extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('amount, interest_rate, months_payable', 'required'),
-			array('interest_rate, months_payable', 'numerical', 'integerOnly'=>true),
-			array('amount', 'length', 'max'=>128),
+			array('account_id, package_id, status, date_created', 'required'),
+			array('account_id, package_id', 'numerical', 'integerOnly'=>true),
+			array('status', 'length', 'max'=>1),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, amount, interest_rate, months_payable', 'safe', 'on'=>'search'),
+			array('id, account_id, package_id, status, date_created', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -46,6 +45,8 @@ class Package extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'account' => array(self::BELONGS_TO, 'Account', 'account_id'),
+			'package' => array(self::BELONGS_TO, 'Package', 'package_id'),
 		);
 	}
 
@@ -56,9 +57,10 @@ class Package extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'amount' => 'Amount',
-			'interest_rate' => 'Interest Rate (%)',
-			'months_payable' => 'Months Payable',
+			'account_id' => 'Account',
+			'package_id' => 'Package',
+			'status' => 'Status',
+			'date_created' => 'Date Created',
 		);
 	}
 
@@ -80,10 +82,11 @@ class Package extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id);
-		$criteria->compare('amount',$this->amount,true);
-		$criteria->compare('interest_rate',$this->interest_rate);
-		$criteria->compare('months_payable',$this->months_payable);
+		$criteria->compare('id',$this->id,true);
+		$criteria->compare('account_id',$this->account_id);
+		$criteria->compare('package_id',$this->package_id);
+		$criteria->compare('status',$this->status,true);
+		$criteria->compare('date_created',$this->date_created,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -94,7 +97,7 @@ class Package extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Package the static model class
+	 * @return Loan the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
