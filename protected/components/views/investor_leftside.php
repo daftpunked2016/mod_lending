@@ -19,11 +19,11 @@
       <li id="dashboard" class="">
         <?php echo CHtml::link('<i class="fa fa-dashboard text-red"></i> <span>Dashboard</span>', array('account/dashboard')); ?>
       </li>
-      <li id="packages">
-        <?php echo CHtml::link('<i class="fa fa-briefcase text-red"></i> <span>View Packages</span>', array('package/list')); ?>
+      <li id="package">
+        <?php echo CHtml::link('<i class="fa fa-briefcase text-red"></i> <span>Packages</span>', array('package/list')); ?>
       </li>
-      <li id="loans">
-        <?php echo CHtml::link('<i class="fa fa-list text-red"></i> <span>Loans</span>', array('loan/list')); ?>
+      <li id="investment">
+        <?php echo CHtml::link('<i class="fa fa-list text-red"></i> <span>Investments</span>', array('loan/list')); ?>
       </li>
       <li id="mailbox" class="">
         <?php echo CHtml::link('<i class="fa fa-envelope text-red"></i> <span>Mailbox</span>', array('message/index', 'folder'=>'inbox')); ?>

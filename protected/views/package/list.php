@@ -49,18 +49,18 @@
 										<?php echo $val->interest_rate; ?>
 										<small>%</small>
 									</h5>
-									<span class="description-text">INTEREST</span>
+									<small class="description-text">INTEREST</small>
 								</div>
 							</div>
 							<div class="col-sm-4 border-right">
 								<div class="description-block">
 									<h5 class="description-header"><?php echo $val->months_payable; ?></h5>
-									<span class="description-text">MONTHS PAYABLE</span>
+									<small class="description-text">MONTHS PAYABLE</small>
 								</div>
 							</div>
 							<div class="col-sm-4">
 								<div class="description-block">
-									<?php echo CHtml::link('<h5><i class="fa fa-sign-in"></i></h5><span class="description-text">APPLY NOW</span>', array('package/apply', 'id'=>$val->id), array('title'=>'Apply Package')); ?>
+									<?php echo CHtml::link('<h5><i class="fa fa-sign-in"></i></h5><small class="description-text">POST INVESTMENT</small>', array('package/apply', 'id'=>$val->id), array('title'=>'Apply Package', 'class'=>'text-red')); ?>
 								</div>
 							</div>
 						</div>
@@ -72,3 +72,9 @@
 		<?php endforeach; ?>
 	</div>
 </section>
+
+<script type="text/javascript">
+$(function() {
+	$('#package').addClass('active');
+});
+</script>

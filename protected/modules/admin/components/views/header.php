@@ -2,9 +2,9 @@
   <!-- Logo -->
   <a href="<?php echo Yii::app()->request->baseUrl; ?>/index.php/admin" class="logo">
     <!-- mini logo for sidebar mini 50x50 pixels -->
-    <span class="logo-mini"><b>1</b>23</span>
+    <span class="logo-mini"><b>CR</b>C</span>
     <!-- logo for regular state and mobile devices -->
-    <span class="logo-lg"><b>Lending</b>Site</span>
+    <span class="logo-lg"><b>ChanRobles</b>Capital</span>
   </a>
   <!-- Header Navbar: style can be found in header.less -->
   <nav class="navbar navbar-static-top" role="navigation">

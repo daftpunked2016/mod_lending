@@ -186,7 +186,7 @@
 			</div>
 		</div>
 		<div class="box-footer">
-			<?php echo CHtml::link("Back", array('content/index'), array('title'=>'Back', 'class'=>'btn btn-danger btn-flat')) ?>
+			<?php echo CHtml::link("Back", array('default/index'), array('title'=>'Back', 'class'=>'btn btn-danger btn-flat')) ?>
 			<div class="pull-right">
 				<?php echo CHtml::submitButton($account->isNewRecord ? 'Register' : 'Save', array('class'=>'btn btn-primary btn-flat pull-right', 'id'=>'btn-submit', 'tabindex'=>4)); ?>
 			</div>

@@ -27,3 +27,9 @@
 <section class="content">
 	
 </section>
+
+<script type="text/javascript">
+$(function() {
+	$('#dashboard').addClass('active');
+});
+</script>

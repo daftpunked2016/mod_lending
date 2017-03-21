@@ -16,7 +16,7 @@
     <!-- sidebar menu: : style can be found in sidebar.less -->
     <ul class="sidebar-menu">
       <li class="header">MAIN NAVIGATION</li>
-      <li class="">
+      <li id="dashboard" class="">
         <?php echo CHtml::link('<i class="fa fa-dashboard text-red"></i> <span>Dashboard</span>', array('default/index')); ?>
       </li>
       <li class="treeview">
@@ -82,8 +82,24 @@
       <li id="mailbox" class="">
         <?php echo CHtml::link('<i class="fa fa-envelope text-red"></i> <span>Mailbox</span>', array('message/index', 'folder'=>'inbox')); ?>
       </li>
-      <li id="loan">
-        <?php echo CHtml::link('<i class="fa fa-list text-red"></i> <span>Loan Application</span>', array('loan/list')); ?>
+      <li id="investment" class="treeview">
+        <a href="#">
+          <i class="fa fa-share"></i> <span>Investments</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu" style="display: block;">
+          <li class="investment-pending">
+            <?php echo CHtml::link('<i class="fa fa-question text-red"></i> Pending', array('loan/list', 'status'=>'P')); ?>
+          </li>
+          <li class="investment-approved">
+            <?php echo CHtml::link('<i class="fa fa-check text-red"></i> Approved', array('loan/list', 'status'=>'A')); ?>
+          </li>
+          <li class="investment-rejected">
+            <?php echo CHtml::link('<i class="fa fa-times text-red"></i> Rejected', array('loan/list', 'status'=>'R')); ?>
+          </li>
+        </ul>
       </li>
     </ul>
   </section>

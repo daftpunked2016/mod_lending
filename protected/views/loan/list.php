@@ -31,7 +31,7 @@
 	<div class="row">
 		<div class="col-md-6"></div>
 		<div class="col-md-6">
-			<?php echo CHtml::link("<i class='fa fa-search'></i> View Packages", array('package/list'), array('class'=>'btn btn-primary btn-flat pull-right')); ?>
+			<?php echo CHtml::link("<i class='fa fa-briefcase'></i> Packages", array('package/list'), array('class'=>'btn btn-danger btn-flat pull-right')); ?>
 		</div>
 	</div>
 	<br>
@@ -61,3 +61,9 @@
 		</div>
 	</div>
 </section>
+
+<script type="text/javascript">
+$(function() {
+	$('#investment').addClass('active');
+});
+</script>

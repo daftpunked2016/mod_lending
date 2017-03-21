@@ -1,13 +1,13 @@
 <section class="content-header">
 	<h1>
-		Loans
-		<small>list</small>
+		Investments
+		<small><?php echo $class_name; ?></small>
 	</h1>
 	<ol class="breadcrumb">
 		<li>
-			<?php echo CHtml::link('Loans', array('loan/list')); ?>
+			<?php echo CHtml::link('Investments', array('loan/list')); ?>
 		</li>
-		<li class="active">List</li>
+		<li class="active"><?php echo ucfirst($class_name); ?></li>
 	</ol>
 	<br>
 	<?php 
@@ -37,6 +37,7 @@
 					'template' => "{sorter}
 					<table id=\"example1\" class=\"table table-bordered table-hover\">
 						<thead class='panel-heading'>
+							<th>SYSTEM ID</th>
 							<th>PACKAGE #</th>
 							<th>INTEREST RATE</th>
 							<th>MONTHS PAYABLE</th>
@@ -54,3 +55,36 @@
 		</div>
 	</div>
 </section>
+
+<!-- Large modal -->
+<div id="view-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content" id="modal-content">
+    	<!-- start content here -->
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+$(function() {
+	var class_name = "<?php echo $class_name; ?>";
+
+	$('#investment').addClass('active');
+	$('.investment-'+class_name).addClass('active');
+});
+
+$(document).on('click', '.view-account', function() {
+	var url = $(this).data('url');
+
+	$.ajax({
+		url: url,
+		beforeSend: function() {
+			$("#modal-content").html("Loading...");
+		},
+		success: function(response) {
+			$("#modal-content").html(response);
+		}
+	})
+});
+
+</script>
