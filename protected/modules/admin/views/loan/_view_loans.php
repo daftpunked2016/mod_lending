@@ -30,7 +30,7 @@
           </button>
           <ul class="dropdown-menu pull-right" role="menu">
             <li>
-            	<?php echo CHtml::link('<span class="fa fa-search"></span> Documents', 'javascript:void(0);', array('class'=>'view-account', 'data-toggle'=>'modal', 'data-target'=>'.bs-example-modal-lg', 'data-url'=>Yii::app()->createUrl('admin/account/view', array('id'=>$data->account_id)))); ?>
+            	<?php echo CHtml::link('<span class="fa fa-search"></span> View Profile', 'javascript:void(0);', array('class'=>'view-account', 'data-toggle'=>'modal', 'data-target'=>'.bs-example-modal-lg', 'data-url'=>Yii::app()->createUrl('admin/account/view', array('id'=>$data->account_id)))); ?>
             </li>
             <li class="divider"></li>
             <li>

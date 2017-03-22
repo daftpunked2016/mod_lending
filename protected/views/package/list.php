@@ -60,7 +60,7 @@
 							</div>
 							<div class="col-sm-4">
 								<div class="description-block">
-									<?php echo CHtml::link('<h5><i class="fa fa-sign-in"></i></h5><small class="description-text">POST INVESTMENT</small>', array('package/apply', 'id'=>$val->id), array('title'=>'Apply Package', 'class'=>'text-red')); ?>
+									<?php echo CHtml::link('<h5><i class="fa fa-sign-in"></i></h5><small class="description-text">POST INVESTMENT</small>', array('package/apply', 'id'=>$val->id), array('title'=>'Apply Package', 'class'=>'post-investment text-red')); ?>
 								</div>
 							</div>
 						</div>
@@ -76,5 +76,9 @@
 <script type="text/javascript">
 $(function() {
 	$('#package').addClass('active');
+
+	$('.post-investment').click(function() {
+		$(this).removeClass("text-red").addClass("text-yellow").html('<h5><i class="fa fa-spinner fa-spin"></i></h5><small class="description-text">PROCESSING</small>')
+	});
 });
 </script>

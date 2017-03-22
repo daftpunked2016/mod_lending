@@ -22,6 +22,9 @@
       <li id="mailbox" class="">
         <?php echo CHtml::link('<i class="fa fa-envelope text-red"></i> <span>Mailbox</span>', array('message/index', 'folder'=>'inbox')); ?>
       </li>
+      <li id="investment" class="">
+        <?php echo CHtml::link('<i class="fa fa-list text-red"></i> <span>Investments</span>', array('loan/investments')); ?>
+      </li>
     </ul>
   </section>
   <!-- /.sidebar -->

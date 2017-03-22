@@ -12,6 +12,10 @@
  */
 class Loan extends CActiveRecord
 {
+	CONST STATUS_PENDING = "P";
+	CONST STATUS_APPROVED = "A";
+	CONST STATUS_REJECTED = "R";
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -47,6 +51,23 @@ class Loan extends CActiveRecord
 		return array(
 			'account' => array(self::BELONGS_TO, 'Account', 'account_id'),
 			'package' => array(self::BELONGS_TO, 'Package', 'package_id'),
+		);
+	}
+
+	public function scopes()
+	{
+		return array(
+			'isPending' => array(
+				'condition' => 't.status = "'.self::STATUS_PENDING.'"',
+			),
+
+			'isApproved' => array(
+				'condition' => 't.status = "'.self::STATUS_APPROVED.'"',
+			),
+
+			'isRejected' => array(
+				'condition' => 't.status = "'.self::STATUS_REJECTED.'"',
+			),
 		);
 	}
 

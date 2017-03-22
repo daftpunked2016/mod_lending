@@ -21,10 +21,10 @@
 		<?php
 			switch ($data->status) {
 				case 'P':
-					echo CHtml::link('Cancel', array('loan/cancel', 'id'=>$data->id), array('class'=>'btn-sm btn-warning', 'confirm'=>'Are you sure you want to cancel this application?'));
+					echo CHtml::link('Cancel', array('loan/cancel', 'id'=>$data->id), array('class'=>'btn-sm btn-warning cancel-investment', 'confirm'=>'Are you sure you want to cancel this application?'));
 					break;
 				case 'R':
-					echo CHtml::link('Apply new loan', array('package/list'), array('class'=>'btn-sm btn-success'));
+					echo CHtml::link('Post new Investment', array('package/list'), array('class'=>'btn-sm btn-success'));
 					break;
 				default:
 					# code...

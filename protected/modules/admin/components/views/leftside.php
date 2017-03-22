@@ -84,9 +84,9 @@
       </li>
       <li id="investment" class="treeview">
         <a href="#">
-          <i class="fa fa-share"></i> <span>Investments</span>
+          <i class="fa fa-share text-red"></i> <span>Investments</span>
           <span class="pull-right-container">
-            <i class="fa fa-angle-left pull-right"></i>
+            <i class="fa fa-angle-left text-red pull-right"></i>
           </span>
         </a>
         <ul class="treeview-menu" style="display: block;">
