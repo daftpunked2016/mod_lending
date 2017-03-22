@@ -255,7 +255,7 @@ $(document).ready(function() {
       alert('Minimum of 2 document files must be uploaded.');
       event.preventDefault();
     } else {
-      $(this).removeClass('btn-primary').addClass('btn-warning disabled').val("<i class='fa fa-spinner fa-spin'></i> Processing");
+      $(this).removeClass('btn-primary').addClass('btn-warning disabled').val("Processing");
     }
   });
 

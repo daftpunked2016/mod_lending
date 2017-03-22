@@ -175,7 +175,7 @@ class ImageFileHandler
 
 	private function setModelData()
 	{
-		$fileupload = new Fileuploads;
+		$fileupload = new FileUploads;
 
 		//set AwardFileupload prop.
 		$fileupload->account_id = $this->account_id;
