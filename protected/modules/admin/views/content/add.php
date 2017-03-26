@@ -84,5 +84,6 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('#content_management').addClass('active');
+		$('#Content_status').val("A");
 	});
 </script>

@@ -57,19 +57,19 @@
 				<?php echo $form->error($content,'content', array('style'=>'color: red;')); ?>
 			</div>
 
-			<div class="form-group">
-				<?php echo $form->labelEx($content, 'status'); ?>
-				<?php echo $form->dropDownList($content,'status', array(
-						'A' =>'Activate',
-						'D' =>'Disable',
-					),
-					array(
-						'prompt' => 'Select Content Status',
-						'class'=>'form-control',
-					));
+			<!-- <div class="form-group">
+				<?php //echo $form->labelEx($content, 'status'); ?>
+				<?php //echo $form->dropDownList($content,'status', array(
+					// 	'A' =>'Activate',
+					// 	'D' =>'Disable',
+					// ),
+					// array(
+					// 	'prompt' => 'Select Content Status',
+					// 	'class'=>'form-control',
+					// ));
 				?>
-				<?php echo $form->error($content,'status', array('style'=>'color: red;')); ?>
-			</div>
+				<?php //echo $form->error($content,'status', array('style'=>'color: red;')); ?>
+			</div> -->
 		</div>
 		<div class="box-footer">
 			<?php echo CHtml::link("Back", array('content/index'), array('title'=>'Back', 'class'=>'btn btn-danger btn-flat')) ?>
