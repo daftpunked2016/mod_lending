@@ -47,7 +47,8 @@
   					'template' => "{sorter}
   					<table class='table table-hover table-striped'>
   						<thead class='panel-heading'>
-  							<th>Package #</th>
+  							<th>#</th>
+  							<th>Package Name</th>
   							<th>Amount</th>
   							<th>Interest</th>
   							<th>Months Payable</th>

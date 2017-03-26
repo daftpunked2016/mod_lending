@@ -101,6 +101,28 @@
           </li>
         </ul>
       </li>
+      <li id="request" class="treeview">
+        <a href="#">
+          <i class="fa fa-sign-in text-red"></i> <span>Loan Requests</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left text-red pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu" style="display: block;">
+          <li class="request-open">
+            <?php echo CHtml::link('<i class="fa fa-genderless text-red"></i> Open', array('request/index', 'status'=>'O')); ?>
+          </li>
+          <li class="request-pending">
+            <?php echo CHtml::link('<i class="fa fa-question text-red"></i> Pending', array('request/index', 'status'=>'P')); ?>
+          </li>
+          <li class="request-approved">
+            <?php echo CHtml::link('<i class="fa fa-check text-red"></i> Approved', array('request/index', 'status'=>'A')); ?>
+          </li>
+          <li class="request-rejected">
+            <?php echo CHtml::link('<i class="fa fa-times text-red"></i> Rejected', array('request/index', 'status'=>'R')); ?>
+          </li>
+        </ul>
+      </li>
     </ul>
   </section>
   <!-- /.sidebar -->

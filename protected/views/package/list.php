@@ -36,7 +36,7 @@
 					<!-- Add the bg color to the header using any of the bg-* classes -->
 					<div class="widget-user-header <?php echo $val->class; ?>">
 						<h3 class="widget-user-username">P <?php echo number_format($val->amount, 2); ?></h3>
-						<h5 class="widget-user-desc">Package <?php echo $val->id; ?></h5>
+						<h5 class="widget-user-desc"><?php echo strtoupper($val->package_name); ?> PACKAGE</h5>
 					</div>
 					<!-- <div class="widget-user-image"> -->
 						<!-- <img class="img-circle" src="../dist/img/user1-128x128.jpg" alt="User Avatar"> -->
@@ -46,7 +46,7 @@
 							<div class="col-sm-4 border-right">
 								<div class="description-block">
 									<h5 class="description-header">
-										<?php echo $val->interest_rate; ?>
+										<?php echo $val->interest_rate * 100; ?>
 										<small>%</small>
 									</h5>
 									<small class="description-text">INTEREST</small>

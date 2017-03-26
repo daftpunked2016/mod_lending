@@ -1,0 +1,7 @@
+03/25/2017
+> ALTER TABLE `package` ADD `package_name` VARCHAR(32) NOT NULL AFTER `id`; 
+> ALTER TABLE `package` CHANGE `interest_rate` `interest_rate` DECIMAL(5,2) NOT NULL; 
+> ALTER TABLE `user` ADD `check_payable_to` VARCHAR(255) NOT NULL COMMENT 'For investor only' AFTER `supporting_documents`; 
+> ALTER TABLE `user` CHANGE `check_payable_to` `check_payable_to` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT 'For investor only'; 
+> ALTER TABLE `user` CHANGE `province` `province` TINYINT(3) UNSIGNED NOT NULL, CHANGE `city` `city` SMALLINT(7) UNSIGNED NOT NULL; 
+> ALTER TABLE `city` ADD INDEX (`province_id`);

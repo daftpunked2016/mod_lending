@@ -1,11 +1,11 @@
 <section class="content-header">
 	<h1>
-		<?php echo $account->user->first_name." ".$account->user->last_name; ?>
+		<?php echo $user->first_name." ".$user->last_name; ?>
 		<small>edit</small>
 	</h1>
 	<ol class="breadcrumb">
 		<li>
-			<?php echo CHtml::link($account->user->first_name." ".$account->user->last_name, array('account/edit', 'id'=>$account->id)); ?>
+			<?php echo CHtml::link($user->first_name." ".$user->last_name, array('account/edit', 'id'=>$account->id)); ?>
 		</li>
 		<li class="active">Edit</li>
 	</ol>
@@ -33,9 +33,11 @@
 
 		</div>
 		<div class="box-body">
-			<!-- HIDDEN VALUES -->
-			<input type="hidden" id="category_id" value="<?php echo $user->business_type->category->id; ?>">
-			<input type="hidden" id="type_id" value="<?php echo $user->business_type_id; ?>">
+			<?php if ($account->account_type == "B"): ?>
+				<!-- HIDDEN VALUES -->
+				<input type="hidden" id="category_id" value="<?php echo $user->business_type->category->id; ?>">
+				<input type="hidden" id="type_id" value="<?php echo $user->business_type_id; ?>">
+			<?php endif; ?>
 
 			<?php $form = $this->beginWidget('CActiveForm', array(
 				'id'=>'edit-form',
@@ -67,8 +69,9 @@
 								),
 								array(
 									'prompt' => 'Select Account Type',
-									'class'=>'form-control',
-									'id'=>'account-type'
+									'class'=>'form-control disable',
+									'id'=>'account-type',
+									'disabled'=>'disabled'
 								));
 							?>
 							<?php echo $form->error($account,'account_type', array('style'=>'color: red;')); ?>
@@ -95,31 +98,42 @@
 							<?php echo $form->error($account,'status', array('style'=>'color: red;')); ?>
 						</div>
 					</div>
+					
 					<div class="col-md-12">
 						<label>
 							<span class="fa fa-book"></span>
 							Business Information
 						</label>
-						<div class="form-group">
-							<?php
-								echo CHtml::dropDownList('User[category_id]', 'category_id',
-									CHtml::listData(BusinessCategory::model()->isActive()->findAll(), 
-									'id', 'category'), array('empty' => 'Select Business Category', 'class'=>'form-control'));
-							?>
-							<div class="error-status"></div>
-						</div>
 
-						<div class="form-group">
-							<?php
-								echo $form->dropDownList($user, 'business_type_id', array(),array('empty' => 'Select Business Type', 'class'=>'form-control'));
-							?>
-							<?php echo $form->error($user,'business_type_id', array('style'=>'color: red;')); ?>
-						</div>
+						<?php if ($account->account_type == "I"): ?>
+							<div class="form-group">
+								<?php echo $form->textField($user,'check_payable_to',array('size'=>255,'maxlength'=>255, 'class'=>'form-control', 'placeholder'=>'Check payable to')); ?>
+								<?php echo $form->error($user,'check_payable_to', array('style'=>'color: red;')); ?>
+							</div>
+						<?php endif; ?>
 
-						<div class="form-group">
-							<?php echo $form->textField($user,'business_name',array('size'=>32,'maxlength'=>32, 'class'=>'form-control', 'placeholder'=>'Business Name')); ?>
-							<?php echo $form->error($user,'business_name', array('style'=>'color: red;')); ?>
-						</div>
+						<?php if ($account->account_type == "B"): ?>
+							<div class="form-group">
+								<?php
+									echo CHtml::dropDownList('User[category_id]', 'category_id',
+										CHtml::listData(BusinessCategory::model()->isActive()->findAll(), 
+										'id', 'category'), array('empty' => 'Select Business Category', 'class'=>'form-control'));
+								?>
+								<div class="error-status"></div>
+							</div>
+
+							<div class="form-group">
+								<?php
+									echo $form->dropDownList($user, 'business_type_id', array(),array('empty' => 'Select Business Type', 'class'=>'form-control'));
+								?>
+								<?php echo $form->error($user,'business_type_id', array('style'=>'color: red;')); ?>
+							</div>
+
+							<div class="form-group">
+								<?php echo $form->textField($user,'business_name',array('size'=>32,'maxlength'=>32, 'class'=>'form-control', 'placeholder'=>'Business Name')); ?>
+								<?php echo $form->error($user,'business_name', array('style'=>'color: red;')); ?>
+							</div>
+						<?php endif; ?>
 					</div>
 				</div>
 				<div class="col-md-6">
@@ -153,12 +167,16 @@
 					</div>
 
 					<div class="form-group">
-						<?php echo $form->textField($user,'province',array('size'=>64,'maxlength'=>64, 'class'=>'form-control', 'placeholder'=>'Province *')); ?>
+						<?php
+					        echo $form->dropDownList($user, 'province',
+					          CHtml::listData(Province::model()->findAll(), 
+					          'id', 'name'), array('empty' => 'Select Province', 'class'=>'form-control'));
+					    ?>
 						<?php echo $form->error($user,'province', array('style'=>'color: red;')); ?>
 					</div>
 
 					<div class="form-group">
-						<?php echo $form->textField($user,'city',array('size'=>64,'maxlength'=>64, 'class'=>'form-control', 'placeholder'=>'City *')); ?>
+						<?php echo $form->dropDownList($user, 'city', CHtml::listData(City::model()->findAll(array('condition'=>'province_id = :pid', 'params'=>array(':pid'=>$user->province))), 'id', 'name'), array('empty' => 'Select City', 'class'=>'form-control')); ?>
 						<?php echo $form->error($user,'city', array('style'=>'color: red;')); ?>
 					</div>
 
@@ -174,8 +192,8 @@
 				</div>
 				<div class="col-md-12">
 					<div class="form-group buttons">
-						<?php echo CHtml::submitButton($account->isNewRecord ? 'Register Now' : 'Save', array('class'=>'btn btn-primary btn-lg btn-flat pull-right', 'id'=>'btn-submit', 'tabindex'=>4)); ?>
-						<?php echo CHtml::link('Back', array('account/index', 'type'=>$account->account_type, 'status'=>$account->status), array('class'=>'btn btn-danger btn-lg btn-flat', 'title'=>'Back', 'confirm'=>'Are you sure you want to Discard your Changes?')); ?>
+						<?php echo CHtml::submitButton($account->isNewRecord ? 'Register Now' : 'Save', array('class'=>'btn btn-primary btn-flat pull-right', 'id'=>'btn-submit', 'tabindex'=>4)); ?>
+						<?php echo CHtml::link('Back', array('account/index', 'type'=>$account->account_type, 'status'=>$account->status), array('class'=>'btn btn-danger btn-flat', 'title'=>'Back', 'confirm'=>'Are you sure you want to Discard your Changes?')); ?>
 					</div>
 				</div>
 			</div>
@@ -192,6 +210,13 @@
 $(document).ready(function() {
 	var category_id = $('#category_id').val();
 	var type_id = $('#type_id').val();
+	var account_type = "<?php echo $account->account_type; ?>";
+
+	if (account_type == "I") {
+		$('#investor_tab_left_side').addClass("active");
+	} else {
+		$('#borrower_tab_left_side').addClass("active");
+	}
 
 	$('#User_category_id').val(category_id);
 
@@ -203,6 +228,10 @@ $(document).ready(function() {
 			$('#User_business_type_id').html(response);
 			$('#User_business_type_id').val(type_id);
 		}
+	});
+
+	$(document).on('click', '#btn-submit', function() {
+		$(this).removeClass('btn-primary').addClass('btn-warning disabled').val('Processing')
 	});
 
 	$(document).on('change', '#User_category_id', function() {

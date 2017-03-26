@@ -1,25 +1,21 @@
 <?php
 
 /**
- * This is the model class for table "package".
+ * This is the model class for table "city".
  *
- * The followings are the available columns in table 'package':
+ * The followings are the available columns in table 'city':
  * @property integer $id
- * @property string $package_name
- * @property string $amount
- * @property string $interest_rate
- * @property integer $months_payable
+ * @property string $name
+ * @property integer $province_id
  */
-class Package extends CActiveRecord
+class City extends CActiveRecord
 {
-	public $class;
-	
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'package';
+		return 'city';
 	}
 
 	/**
@@ -30,14 +26,12 @@ class Package extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('package_name, amount, interest_rate, months_payable', 'required'),
-			array('months_payable', 'numerical', 'integerOnly'=>true),
-			array('package_name', 'length', 'max'=>32),
-			array('amount', 'length', 'max'=>128),
-			array('interest_rate', 'length', 'max'=>5),
+			array('name, province_id', 'required'),
+			array('province_id', 'numerical', 'integerOnly'=>true),
+			array('name', 'length', 'max'=>300),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, package_name, amount, interest_rate, months_payable', 'safe', 'on'=>'search'),
+			array('id, name, province_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -59,10 +53,8 @@ class Package extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'package_name' => 'Package Name',
-			'amount' => 'Amount',
-			'interest_rate' => 'Interest Rate',
-			'months_payable' => 'Months Payable',
+			'name' => 'Name',
+			'province_id' => 'Province',
 		);
 	}
 
@@ -85,10 +77,8 @@ class Package extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('package_name',$this->package_name,true);
-		$criteria->compare('amount',$this->amount,true);
-		$criteria->compare('interest_rate',$this->interest_rate,true);
-		$criteria->compare('months_payable',$this->months_payable);
+		$criteria->compare('name',$this->name,true);
+		$criteria->compare('province_id',$this->province_id);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -99,7 +89,7 @@ class Package extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Package the static model class
+	 * @return City the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

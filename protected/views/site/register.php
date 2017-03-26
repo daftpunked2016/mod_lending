@@ -84,15 +84,19 @@
   </div>
 
   <div class="form-group has-feedback">
-      <?php echo $form->textField($user,'province',array('size'=>60,'maxlength'=>64, 'class'=>'form-control', 'placeholder'=>'Province *')); ?>
+      <?php
+        echo $form->dropDownList($user, 'province',
+          CHtml::listData(Province::model()->findAll(), 
+          'id', 'name'), array('empty' => 'Select Province', 'class'=>'form-control'));
+      ?>
       <?php echo $form->error($user,'province', array('class'=>'text-red')); ?>
-      <span class="glyphicon glyphicon-map-marker form-control-feedback"></span>
+      <!-- <span class="glyphicon glyphicon-map-marker form-control-feedback"></span> -->
   </div>
 
   <div class="form-group has-feedback">
-      <?php echo $form->textField($user,'city',array('size'=>60,'maxlength'=>64, 'class'=>'form-control', 'placeholder'=>'City *')); ?>
+      <?php echo $form->dropDownList($user, 'city', array(), array('empty' => 'Select City', 'class'=>'form-control')); ?>
       <?php echo $form->error($user,'city', array('class'=>'text-red')); ?>
-      <span class="glyphicon glyphicon-map-marker form-control-feedback"></span>
+      <!-- <span class="glyphicon glyphicon-map-marker form-control-feedback"></span> -->
   </div>
 
   <div class="form-group has-feedback">
@@ -106,6 +110,14 @@
       <?php echo $form->error($user,'tin', array('class'=>'text-red')); ?>
       <span class="glyphicon glyphicon-th form-control-feedback"></span>
   </div>
+
+  <?php if ($type == "I"): ?>
+    <div class="form-group has-feedback">
+        <?php echo $form->textField($user,'check_payable_to',array('size'=>255,'maxlength'=>255, 'class'=>'form-control', 'placeholder'=>'Check payable to')); ?>
+        <?php echo $form->error($user,'check_payable_to', array('class'=>'text-red')); ?>
+        <span class="glyphicon glyphicon-map-marker form-control-feedback"></span>
+    </div>
+  <?php endif; ?>
 
   <?php if ($type == "B"): ?>
   <div class="form-group has-feedback">
@@ -225,6 +237,8 @@
 $(document).ready(function() {
 
   var business_category = $('#User_business_category').val();
+  var province = $('#User_province').val();
+  var city = "<?php echo $user->city; ?>"
   var business_type = "<?php echo $user->business_type_id; ?>";
   var account_type = "<?= $type; ?>"
 
@@ -238,6 +252,21 @@ $(document).ready(function() {
 
         if (business_type) {
           $('#User_business_type_id').val(business_type);
+        }
+      }
+    });
+  };
+
+  if (province) {
+    $.ajax({
+      url: "<?php echo Yii::app()->createUrl('common/listcities'); ?>",
+      data: {province_id : province},
+      method: "POST",
+      success: function(response) {
+        $('#User_city').html(response);
+
+        if (city) {
+          $('#User_city').val(city);
         }
       }
     });
@@ -313,6 +342,18 @@ $(document).ready(function() {
       }
   });
 
+  $(document).on('change', '#User_province', function() {
+    var province_id = $(this).val();
+
+    $.ajax({
+      url: "<?php echo Yii::app()->createUrl('common/listcities'); ?>",
+      method: 'POST',
+      data: {province_id : province_id},
+      success: function(response) {
+        $('#User_city').html(response);
+      }
+    });
+  });
 
 });
 </script>

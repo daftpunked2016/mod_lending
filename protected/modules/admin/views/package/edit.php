@@ -1,11 +1,11 @@
 <section class="content-header">
 	<h1>
-		Package
-		<small>create</small>
+		<?php echo ucfirst($package->package_name); ?> Package
+		<small>edit</small>
 	</h1>
 	<ol class="breadcrumb">
 		<li>
-			<?php echo CHtml::link("Package", array('package/create')); ?>
+			<?php echo CHtml::link(ucfirst($package->package_name), array('package/edit', 'id'=>$package->id)); ?>
 		</li>
 		<li class="active">Create</li>
 	</ol>
@@ -30,7 +30,7 @@
 <section class="content">
 	<div class="box">
 		<?php $form = $this->beginWidget('CActiveForm', array(
-			'id'=>'create-form',
+			'id'=>'edit-form',
 			// Please note: When you enable ajax validation, make sure the corresponding
 			// controller action is handling ajax validation correctly.
 			// There is a call to performAjaxValidation() commented in generated controller code.

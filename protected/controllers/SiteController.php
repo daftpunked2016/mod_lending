@@ -34,7 +34,7 @@ class SiteController extends Controller
 		$packages = Package::model()->findAll();
 
 		$this->render('index', array(
-			'packages' => $packages
+			'packages' => $packages,
 		));
 	}
 

@@ -148,7 +148,11 @@
 							<?php echo $form->labelEx($user, 'province'); ?>
 						</div>
 						<div class="col-md-8">
-							<?php echo $form->textField($user,'province',array('size'=>64,'maxlength'=>64, 'class'=>'form-control', 'placeholder'=>'Province *')); ?>
+							<?php
+						        echo $form->dropDownList($user, 'province',
+						          CHtml::listData(Province::model()->findAll(), 
+						          'id', 'name'), array('empty' => 'Select Province', 'class'=>'form-control'));
+						    ?>
 							<?php echo $form->error($user,'province', array('style'=>'color: red;')); ?>
 						</div>
 					</div>
@@ -158,7 +162,7 @@
 							<?php echo $form->labelEx($user, 'city'); ?>
 						</div>
 						<div class="col-md-8">
-							<?php echo $form->textField($user,'city',array('size'=>64,'maxlength'=>64, 'class'=>'form-control', 'placeholder'=>'City *')); ?>
+							<?php echo $form->dropDownList($user, 'city', CHtml::listData(City::model()->findAll(array('condition'=>'province_id = :pid', 'params'=>array(':pid'=>$user->province))), 'id', 'name'), array('empty' => 'Select City', 'class'=>'form-control')); ?>
 							<?php echo $form->error($user,'city', array('style'=>'color: red;')); ?>
 						</div>
 					</div>
@@ -195,3 +199,20 @@
 		</div>
 	</div>
 </section>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	$(document).on('change', '#User_province', function() {
+	    var province_id = $(this).val();
+
+	    $.ajax({
+			url: "<?php echo Yii::app()->createUrl('common/listcities'); ?>",
+			method: 'POST',
+			data: {province_id : province_id},
+			success: function(response) {
+				$('#User_city').html(response);
+			}
+	    });
+	  });
+});
+</script>

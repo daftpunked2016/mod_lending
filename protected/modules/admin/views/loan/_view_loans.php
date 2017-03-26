@@ -4,7 +4,7 @@
 			<?php echo CHtml::encode($data->account->user->id_name); ?>
 		</strong>
 	</td>
-	<td><?php echo CHtml::encode($data->package_id); ?></td>
+	<td><?php echo CHtml::encode(strtoupper($data->package->package_name)); ?></td>
 	<td><?php echo CHtml::encode($data->package->interest_rate); ?>%</td>
 	<td><?php echo CHtml::encode($data->package->months_payable); ?> mos.</td>
 	<td>

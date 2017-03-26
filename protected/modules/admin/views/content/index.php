@@ -28,11 +28,9 @@
 </section>
 
 <section class="content">
+	<?php echo CHtml::link('<i class="fa fa-plus"></i> ADD CONTENT', array('content/add'), array('class'=>'btn btn-danger btn-flat pull-right', 'title'=>'Add new Content')); ?>
+	<br></br>
 	<div class="box box-solid">
-		<div class="box-header">
-			<span class="fa fa-cogs"></span> List of Contents
-			<?php echo CHtml::link('<i class="fa fa-plus"></i> Add Content', array('content/add'), array('class'=>'btn btn-info btn-flat pull-right', 'title'=>'Add new Content')); ?>
-		</div>
 		<div class="box-body">
 			<?php  
 				$this->widget('zii.widgets.CListView', array(
@@ -41,17 +39,16 @@
 					'template' => "{sorter}
 					<table id=\"example1\" class=\"table table-bordered table-hover\">
 						<thead class='panel-heading'>
-							<th>ID #</th>
-							<th>Description</th>
-							<th>Status</th>
-							<th>Actions</th>
+							<th>DESCRIPTION</th>
+							<th>CONTENT</th>
+							<th class='text-center'>ACTIONS</th>
 						</thead>
 						<tbody>
 							{items}
 						</tbody>
 					</table>
 					{pager}",
-					'emptyText' => "<tr><td class='text-center' colspan=\"4\">No available entries</td></tr>",
+					'emptyText' => "<tr><td class='text-center' colspan=\"3\">No available entries</td></tr>",
 				));
 			?>
 		</div>

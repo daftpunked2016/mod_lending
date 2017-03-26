@@ -52,4 +52,35 @@ class PackageController extends Controller
 			'package'=>$package
 		));
 	}
+
+	public function actionEdit($id)
+	{
+		$package = Package::model()->findByPk($id);
+
+		if (isset($_POST['Package'])) {
+			$package->attributes = $_POST['Package'];
+
+			$valid = $package->validate();
+
+			if ($valid) {
+				$transaction = Yii::app()->db->beginTransaction();
+
+				try {
+					if ($package->save()) {
+						$transaction->commit();
+						Yii::app()->user->setFlash('success', 'Package has been updated!');
+						$this->redirect(array('package/index'));
+					}
+				} catch (Exception $e) {
+					$transaction->rollback();
+					Yii::app()->user->setFlash('error', 'Package has been failed!');
+					$this->redirect(array('package/index'));
+				}
+			}
+		}
+
+		$this->render('edit', array(
+			'package' => $package
+		));
+	}
 }

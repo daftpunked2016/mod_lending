@@ -219,7 +219,7 @@ class AccountController extends Controller
 						if ($user->save()) {
 							$transaction->commit();
 							Yii::app()->user->setFlash('success', 'Edit Account Complete!');
-							$this->redirect(array('account/index', 'type'=>$account->account_type, 'status'=>$account->status));
+							$this->redirect(array('account/edit', 'id'=>$account->id));
 						}
 					}
 				} catch (Exception $e) {
@@ -228,8 +228,7 @@ class AccountController extends Controller
 					$this->redirect(array('account/index', 'type'=>$account->account_type, 'status'=>$account->status));
 				}
 			} else {
-				Yii::app()->user->setFlash('error', 'Edit Account Validation Failed. Please Contact System Developer.');
-				$this->redirect(array('account/index', 'type'=>$account->account_type, 'status'=>$account->status));
+				Yii::app()->user->setFlash('error', 'Edit Account Validation Failed. Please double check the required fields.');
 			}
 		}
 
@@ -275,6 +274,8 @@ class AccountController extends Controller
 		$this->renderPartial('view', array(
 			'account' => $account,
 			'user' => $account->user,
+			'province' => Province::model()->findByPk($account->user->province),
+			'city' => City::model()->findByPk($account->user->city),
 			'supporting_documents' => $supporting_documents
 		));
 	}

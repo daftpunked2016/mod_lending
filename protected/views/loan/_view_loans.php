@@ -1,7 +1,7 @@
 <tr>
 	<td><?php echo CHtml::encode($data->package_id); ?></td>
-	<td><?php echo CHtml::encode($data->package->interest_rate); ?>%</td>
-	<td><?php echo CHtml::encode($data->package->months_payable); ?> mos.</td>
+	<td><?php echo CHtml::encode($data->package->interest_rate * 100); ?>%</td>
+	<td><?php echo CHtml::encode($data->package->months_payable); ?> months</td>
 	<td>
 		<?php
 			switch ($data->status) {

@@ -11,13 +11,13 @@ class PackageController extends Controller
 		foreach ($packages as $key => $value) {
 			switch ($value->id) {
 				case 1:
-					$packages[$key]['class'] = "bg-yellow";
+					$packages[$key]['class'] = "bg-gray disabled color-palette";
 					break;
 				case 2:
-					$packages[$key]['class'] = "bg-blue";
+					$packages[$key]['class'] = "bg-yellow disabled color-palette";
 					break;
 				default:
-					$packages[$key]['class'] = "bg-green";
+					$packages[$key]['class'] = "bg-gray-active color-palette";
 					break;
 			}
 		}

@@ -23,6 +23,7 @@ class AccountController extends Controller
 	public function actionSettings()
 	{
 		$account = Account::model()->findByPk(Yii::app()->user->id);
+		$user = $account->user;
 		$account->setScenario("updateAccount");
 
 		#Method set scenario rules
@@ -32,10 +33,10 @@ class AccountController extends Controller
 
 		if (isset($_POST['Account']) && isset($_POST['User'])) {
 			$account->attributes = $_POST['Account'];
-			$account->user->attributes = $_POST['User'];
+			$user->attributes = $_POST['User'];
 
 			$valid = $account->validate();
-			$valid = $account->user->validate() && $valid;
+			$valid = $user->validate() && $valid;
 
 			if ($valid) {
 
@@ -49,7 +50,7 @@ class AccountController extends Controller
 
 				try {
 					if ($account->save(false)) {
-						if ($account->user->save()) {
+						if ($user->save()) {
 							$transaction->commit();
 							Yii::app()->user->setFlash('success', 'Update Account Successful!');
 							$this->redirect(array('account/settings'));
@@ -65,9 +66,14 @@ class AccountController extends Controller
 			}
 		}
 
+		#Method assigning
+		if ($account->account_type == "B") {
+			$user->business_category = $user->business_type->cat_id;
+		}
+
 		$this->render('settings', array(
 			'account' => $account,
-			'user' => $account->user
+			'user' => $user
 		));
 	}
 }

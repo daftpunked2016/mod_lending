@@ -12,7 +12,7 @@
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav navbar-right text-uppercase">
         <li><a href="#home">Home</a></li>
-        <li><a href="#feature">Features</a></li>
+        <li><a href="#feature">Services</a></li>
         <li><a href="#pricing">Packages</a></li>
         <li><a href="#download">Download</a></li>
         <li><a href="#contact">Contact</a></li>

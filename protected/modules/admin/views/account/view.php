@@ -26,6 +26,10 @@
 				}
 			?>
 			<label>Account Status:</label> <?php echo $account_status; ?>
+			<?php if ($account->account_type == "I"): ?>
+				<br>
+				<label>Check Payable to:</label> <?php echo $user->check_payable_to; ?>
+			<?php endif ?>
 		</div>
 		<div class="col-md-4">
 			<label>First name:</label> <?php echo $user->first_name; ?>
@@ -47,9 +51,9 @@
 				<label>Address 2:</label> <?php echo $user->address2; ?>
 				<br>
 			<?php endif; ?>
-			<label>Province:</label> <?php echo $user->province; ?>
+			<label>Province:</label> <?php echo $province->name; ?>
 			<br>
-			<label>City:</label> <?php echo $user->city; ?>
+			<label>City:</label> <?php echo $city->name; ?>
 		</div>
 	</div>
 	<div class="row">

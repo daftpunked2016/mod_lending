@@ -148,7 +148,11 @@
 							<?php echo $form->labelEx($user, 'province'); ?>
 						</div>
 						<div class="col-md-8">
-							<?php echo $form->textField($user,'province',array('size'=>64,'maxlength'=>64, 'class'=>'form-control', 'placeholder'=>'Province *')); ?>
+							<?php
+						        echo $form->dropDownList($user, 'province',
+						          CHtml::listData(Province::model()->findAll(), 
+						          'id', 'name'), array('empty' => 'Select Province', 'class'=>'form-control'));
+						    ?>
 							<?php echo $form->error($user,'province', array('style'=>'color: red;')); ?>
 						</div>
 					</div>
@@ -158,7 +162,7 @@
 							<?php echo $form->labelEx($user, 'city'); ?>
 						</div>
 						<div class="col-md-8">
-							<?php echo $form->textField($user,'city',array('size'=>64,'maxlength'=>64, 'class'=>'form-control', 'placeholder'=>'City *')); ?>
+							<?php echo $form->dropDownList($user, 'city', CHtml::listData(City::model()->findAll(array('condition'=>'province_id = :pid', 'params'=>array(':pid'=>$user->province))), 'id', 'name'), array('empty' => 'Select City', 'class'=>'form-control')); ?>
 							<?php echo $form->error($user,'city', array('style'=>'color: red;')); ?>
 						</div>
 					</div>
@@ -182,11 +186,66 @@
 							<?php echo $form->error($user,'tin', array('style'=>'color: red;')); ?>
 						</div>
 					</div>
+					<?php if ($account->account_type == "I"): ?>
+						<br>
+						<div class="row">
+							<div class="col-md-4">
+								<?php echo $form->labelEx($user, 'check_payable_to'); ?>
+							</div>
+							<div class="col-md-8">
+								<?php echo $form->textField($user,'check_payable_to',array('size'=>255,'maxlength'=>255, 'class'=>'form-control', 'placeholder'=>'Check payable to')); ?>
+								<?php echo $form->error($user,'check_payable_to', array('style'=>'color: red;')); ?>
+							</div>
+						</div>
+					<?php endif; ?>
+
+					<?php if ($account->account_type == "B"): ?>
+						<hr>
+						<p>Business Details</p>
+						<br>
+						<div class="row">
+							<div class="col-md-4">
+								<?php echo $form->labelEx($user, 'business_category'); ?>
+							</div>
+							<div class="col-md-8">
+								<?php
+							        echo $form->dropDownList($user, 'business_category',
+							          CHtml::listData(BusinessCategory::model()->isActive()->findAll(), 
+							          'id', 'category'), array('empty' => 'Select Business Category', 'class'=>'form-control'));
+							    ?>
+								<?php echo $form->error($user,'business_category', array('style'=>'color: red;')); ?>
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-md-4">
+								<?php echo $form->labelEx($user, 'business_type_id'); ?>
+							</div>
+							<div class="col-md-8">
+								<?php
+							        echo $form->dropDownList($user, 'business_type_id',
+							          CHtml::listData(BusinessType::model()->isActive()->findAll(array('condition'=>'cat_id = :cid', 'params'=>array(':cid'=>$user->business_category))), 
+							          'id', 'type'), array('empty' => 'Select Business Category', 'class'=>'form-control'));
+							    ?>
+								<?php echo $form->error($user,'business_type_id', array('style'=>'color: red;')); ?>
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-md-4">
+								<?php echo $form->labelEx($user, 'business_name'); ?>
+							</div>
+							<div class="col-md-8">
+								<?php echo $form->textField($user,'business_name',array('size'=>64,'maxlength'=>64, 'class'=>'form-control', 'placeholder'=>'Business Name')); ?>
+								<?php echo $form->error($user,'business_name', array('style'=>'color: red;')); ?>
+							</div>
+						</div>
+					<?php endif; ?>
 				</div>
 			</div>
 		</div>
 		<div class="box-footer">
-			<?php echo CHtml::link("Back to Dashboard", array('account/dashboard'), array('title'=>'Back', 'class'=>'btn btn-danger btn-flat')) ?>
+			<?php echo CHtml::link("Back", array('default/index'), array('title'=>'Back', 'class'=>'btn btn-danger btn-flat')) ?>
 			<div class="pull-right">
 				<?php echo CHtml::submitButton($account->isNewRecord ? 'Register' : 'Save', array('class'=>'btn btn-primary btn-flat pull-right', 'id'=>'btn-submit', 'tabindex'=>4)); ?>
 			</div>
@@ -195,3 +254,33 @@
 		</div>
 	</div>
 </section>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	$(document).on('change', '#User_province', function() {
+	    var province_id = $(this).val();
+
+	    $.ajax({
+			url: "<?php echo Yii::app()->createUrl('common/listcities'); ?>",
+			method: 'POST',
+			data: {province_id : province_id},
+			success: function(response) {
+				$('#User_city').html(response);
+			}
+	    });
+	});
+
+	$(document).on('change', '#User_business_category', function() {
+	    var cat_id = $(this).val();
+
+	    $.ajax({
+	      url: "<?php echo Yii::app()->createUrl('common/listbusinesstype'); ?>",
+	      data: {cat_id : cat_id},
+	      method: "POST",
+	      success: function(response) {
+	        $('#User_business_type_id').html(response);
+	      }
+	    });
+	});
+});
+</script>

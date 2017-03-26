@@ -12,13 +12,16 @@
  * @property string $last_name
  * @property string $address1
  * @property string $address2
- * @property string $province
- * @property string $city
+ * @property integer $province
+ * @property integer $city
  * @property string $contact_number
  * @property string $tin
  * @property integer $business_type_id
  * @property string $business_name
+ * @property integer $dti_file_id
+ * @property integer $sec_file_id
  * @property string $supporting_documents
+ * @property string $check_payable_to
  */
 class User extends CActiveRecord
 {
@@ -44,12 +47,13 @@ class User extends CActiveRecord
 		return array(
 			array('first_name, last_name, address1, province, city, contact_number, tin', 'required'),
 			array('business_type_id, business_category, business_name', 'required', 'on'=>'createNewBorrower'),
-			array('business_type_id, contact_number, dti_file_id, sec_file_id', 'numerical', 'integerOnly'=>true),
+			array('province, city, business_type_id, contact_number, dti_file_id, sec_file_id', 'numerical', 'integerOnly'=>true),
 			array('account_id', 'length', 'max'=>11),
 			array('id_name, first_name, middle_name, last_name, province, city, business_name', 'length', 'max'=>64),
 			array('address1, address2', 'length', 'max'=>128),
 			array('contact_number, tin', 'length', 'max'=>32),
 			array('supporting_documents', 'length', 'max'=>1000),
+			array('check_payable_to', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, account_id, id_name, first_name, middle_name, last_name, address1, address2, province, city, contact_number, tin, business_type_id, business_name', 'safe', 'on'=>'search'),
@@ -65,6 +69,8 @@ class User extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'account' => array(self::BELONGS_TO, 'Account', 'account_id'),
+			'province' => array(self::BELONGS_TO, 'Province', 'province'),
+			'city' => array(self::BELONGS_TO, 'City', 'city'),
 			'business_type' => array(self::BELONGS_TO, 'BusinessType', 'business_type_id'),
 		);
 	}
@@ -89,8 +95,11 @@ class User extends CActiveRecord
 			'tin' => 'Tin',
 			'business_type_id' => 'Business Type',
 			'business_name' => 'Business Name',
+			'dti_file_id' => 'DTI File',
+			'sec_file_id' => 'SEC File',
 			'supporting_documents' => 'Supporting Documents',
 			'business_category' => 'Business Category',
+			'check_payable_to' => 'Check Payable To',
 		);
 	}
 
@@ -120,14 +129,17 @@ class User extends CActiveRecord
 		$criteria->compare('last_name',$this->last_name,true);
 		$criteria->compare('address1',$this->address1,true);
 		$criteria->compare('address2',$this->address2,true);
-		$criteria->compare('province',$this->province,true);
-		$criteria->compare('city',$this->city,true);
+		$criteria->compare('province',$this->province);
+		$criteria->compare('city',$this->city);
 		$criteria->compare('contact_number',$this->contact_number,true);
 		$criteria->compare('tin',$this->tin,true);
 		$criteria->compare('business_type_id',$this->business_type_id);
 		$criteria->compare('business_name',$this->business_name,true);
+		$criteria->compare('dti_file_id',$this->dti_file_id);
+		$criteria->compare('sec_file_id',$this->sec_file_id);
 		$criteria->compare('supporting_documents',$this->supporting_documents,true);
-				
+		$criteria->compare('check_payable_to',$this->check_payable_to,true);
+
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));

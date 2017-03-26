@@ -38,7 +38,7 @@
 					<table id=\"example1\" class=\"table table-bordered table-hover\">
 						<thead class='panel-heading'>
 							<th>SYSTEM ID</th>
-							<th>PACKAGE #</th>
+							<th>PACKAGE NAME</th>
 							<th>AMOUNT</th>
 							<th>INTEREST RATE</th>
 							<th>MONTHS PAYABLE</th>
@@ -56,12 +56,31 @@
 	</div>
 </section>
 
+<!-- Large modal -->
+<div id="view-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content" id="modal-content">
+    	<!-- start content here -->
+    </div>
+  </div>
+</div>
+
 <script type="text/javascript">
 $(function() {
 	$('#investment').addClass('active');
 
 	$('.apply-loan').click(function() {
-		alert('Under construction.');
+		var url = $(this).data('url');
+
+		$.ajax({
+			url: url,
+			beforeSend: function() {
+				$("#modal-content").html("Loading...");
+			},
+			success: function(response) {
+				$("#modal-content").html(response);
+			}
+		})
 	});
 });
 </script>

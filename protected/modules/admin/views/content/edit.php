@@ -47,7 +47,7 @@
 
 			<div class="form-group">
 				<?php echo $form->labelEx($content, 'description'); ?>
-				<?php echo $form->textField($content,'description',array('size'=>64,'maxlength'=>64, 'class'=>'form-control', 'placeholder'=>'Description')); ?>
+				<?php echo $form->textField($content,'description',array('size'=>64,'maxlength'=>64, 'class'=>'form-control', 'placeholder'=>'Description', 'disabled'=>'disabled')); ?>
 				<?php echo $form->error($content,'description', array('style'=>'color: red;')); ?>
 			</div>
 

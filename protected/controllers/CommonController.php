@@ -19,4 +19,22 @@ class CommonController extends Controller
 		echo $result;
 		exit;
 	}
+
+	public function actionListCities()
+	{
+		$result = "<option value='' disabled selected>Select City</option>";
+
+		if (!empty($_POST['province_id'])) {
+			$province_id = $_POST['province_id'];
+
+			$city_data = City::model()->findAll(array('condition'=>'province_id = :pid', 'params'=>array(':pid'=>$province_id)));
+
+			foreach ($city_data as $value) {
+				$result .= "<option value=".$value->id.">".$value->name."</option>";
+			}
+		}
+
+		echo $result;
+		exit;
+	}
 }

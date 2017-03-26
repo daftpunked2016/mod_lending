@@ -1,6 +1,6 @@
 <head>
 	<meta charset="utf-8">
-	<title>Boxer - Software Landing Page</title>
+	<title><?php echo Yii::app()->name; ?></title>
 	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="keywords" content="">
