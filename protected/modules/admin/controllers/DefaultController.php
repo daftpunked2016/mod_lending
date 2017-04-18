@@ -5,9 +5,17 @@ class DefaultController extends Controller
 	public $layout = '/layouts/main';
 
 	public function actionIndex()
-	{
-		$this->render('index', array(
+	{	
+		$total_investor = Account::model()->isInvestor()->count();
+		$total_borrower = Account::model()->isBorrower()->count();
+		$total_investment = Loan::model()->isApproved()->count();
+		$total_loan = LoanRequest::model()->isApproved()->count();
 
+		$this->render('index', array(
+			'total_investor' => $total_investor,
+			'total_borrower' => $total_borrower,
+			'total_investment' => $total_investment,
+			'total_loan' => $total_loan,
 		));
 	}
 

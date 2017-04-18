@@ -23,7 +23,10 @@
         <?php echo CHtml::link('<i class="fa fa-envelope text-red"></i> <span>Mailbox</span>', array('message/index', 'folder'=>'inbox')); ?>
       </li>
       <li id="investment" class="">
-        <?php echo CHtml::link('<i class="fa fa-list text-red"></i> <span>Investments</span>', array('loan/investments')); ?>
+        <?php echo CHtml::link('<i class="fa fa-share text-red"></i> <span>Investments</span>', array('loan/investments')); ?>
+      </li>
+      <li id="loans" class="">
+        <?php echo CHtml::link('<i class="fa fa-sign-in text-red"></i> <span>Loans</span>', array('loan/index')); ?>
       </li>
     </ul>
   </section>

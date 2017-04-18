@@ -8,6 +8,21 @@ class LoanController extends Controller
 
 	public $layout = '/layouts/user_main';
 
+
+	public function actionIndex()
+	{
+		$loan_requests = LoanRequest::model()->findAll(array('condition' => 'borrower_id = :aid', 'params'=>array(':aid'=>Yii::app()->user->id)));
+		$loan_requestsDP = new CArrayDataProvider($loan_requests, array(
+			'pagination' => array(
+				'pageSize' => 10
+			)
+		));
+
+		$this->render('index', array(
+			'loan_requestsDP' => $loan_requestsDP
+		));
+	}
+
 	public function actionList()
 	{
 		$loans = Loan::model()->findAll(array('condition' => 'account_id = :aid', 'params'=>array(':aid'=>Yii::app()->user->id)));
@@ -25,6 +40,13 @@ class LoanController extends Controller
 	public function actionCancel($id)
 	{	
 		$loan = Loan::model()->findByPk($id);
+
+		#Method delete package record if investor cancel his custom investment package
+		if ($loan->package->account_id === Yii::app()->user->id) {
+			$loan->package->delete();
+			$loan->package->save();
+		}
+
 		$loan->delete();
 
 		if ($loan->save()) {
@@ -36,12 +58,12 @@ class LoanController extends Controller
 	public function actionInvestments()
 	{
 		#Method validate if investment request is pending
-		if (LoanRequest::model()->find(array('condition'=>'borrower_id = :borrower_id AND status = "P"', 'params'=>array(':borrower_id'=>Yii::app()->user->id)))) {
+		if (LoanRequest::model()->count(array('condition'=>'borrower_id = :borrower_id AND status = "P"', 'params'=>array(':borrower_id'=>Yii::app()->user->id)))) {
 			Yii::app()->user->setFlash('error', 'You have a pending loan request. Please wait for System administrator for clearance.');
 			$this->redirect(array('account/dashboard'));
 		}
 
-		$investments = Loan::model()->isApproved()->findAll();
+		$investments = Loan::model()->isApproved()->findAll(array('condition'=>'id NOT IN (SELECT loan_id FROM loan_request WHERE status IN ("A", "P"))'));
 		$investmentsDP = new CArrayDataProvider($investments, array(
 			'pagination' => array(
 				'pageSize' => 10
@@ -71,7 +93,7 @@ class LoanController extends Controller
 					if ($loan_request->save()) {
 						$transaction->commit();
 						Yii::app()->user->setFlash('success', 'Loan request successful. Please wait for System Admin to approve your request. Thank you!');
-						$this->redirect(array('account/dashboard'));
+						$this->redirect(array('loan/index'));
 					}
 				} catch (Exception $e) {
 					$transaction->rollback();
@@ -83,7 +105,7 @@ class LoanController extends Controller
 		}
 	}
 
-	public function actionComputation($id)
+	public function actionComputation($id, $viewing = false)
 	{
 		$loan_data = Loan::model()->findByPk($id);
 		$package_data = $loan_data->package;
@@ -101,6 +123,33 @@ class LoanController extends Controller
 		$this->renderPartial('computation', array(
 			'result' => $result,
 			'loan_data' => $loan_data,
+			'viewing' => $viewing,			
+		));
+	}
+
+	public function actionCancelLoan($id)
+	{
+		$request = LoanRequest::model()->findByPk($id);
+
+		if ($request->status === "A") {
+			Yii::app()->user->setFlash('error', 'Your Loan Request is been Approved. Please contact System Administrator for more details.');
+			$this->redirect(array('loan/index'));
+		}
+
+		$request->delete();
+
+		if ($request->save()) {
+			Yii::app()->user->setFlash('success', 'Loan Request cancelled Complete!');
+			$this->redirect(array('loan/index'));
+		}
+	}
+
+	public function actionPostRequest()
+	{
+
+
+		$this->render('post_request', array(
+
 		));
 	}
 }

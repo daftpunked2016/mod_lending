@@ -47,11 +47,21 @@
 		</tr>
 	</table>
 </div>
-<div class="modal-footer">
-	<div class="pull-left">
-		<?php echo CHtml::link('Close', 'javascript:void(0);', array('data-dismiss'=>'modal', 'class'=>'btn btn-danger btn-flat')); ?>
+<?php if ($viewing == false): ?>
+	<div class="modal-footer">
+		<div class="pull-left">
+			<?php echo CHtml::link('Close', 'javascript:void(0);', array('data-dismiss'=>'modal', 'class'=>'btn btn-danger btn-flat')); ?>
+		</div>
+		<div class="pull-right">
+			<?php echo CHtml::link('Apply', array('loan/apply', 'loan_id'=>$loan_data->id), array('class'=>'btn btn-danger btn-flat btn-apply', 'title'=>'Apply Loan')); ?>
+		</div>
 	</div>
-	<div class="pull-right">
-		<?php echo CHtml::link('Apply', array('loan/apply', 'loan_id'=>$loan_data->id), array('class'=>'btn btn-danger btn-flat', 'title'=>'Apply Loan')); ?>
-	</div>
-</div>
+<?php endif ?>
+
+<script type="text/javascript">
+$(function() {
+	$('.btn-apply').click(function() {
+		$(this).removeClass('btn-danger').addClass('btn-warning disabled').html('Processing');
+	});
+})
+</script>

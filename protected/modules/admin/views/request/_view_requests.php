@@ -1,7 +1,7 @@
 <?php $package = $data->loan->package; ?>
 
 <tr>
-	<td><?php echo CHtml::encode($data->account->user->id_name); ?></td>
+	<td><strong><?php echo CHtml::encode($data->account->user->id_name); ?></strong></td>
 	<td><?php echo CHtml::encode(strtoupper($package->package_name)); ?></td>
 	<td><?php echo CHtml::encode($package->interest_rate * 100); ?>%</td>
 	<td><?php echo CHtml::encode($package->months_payable); ?></td>

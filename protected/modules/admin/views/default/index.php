@@ -25,7 +25,68 @@
 </section>
 
 <section class="content">
-	
+	<div class="row">
+		<div class="col-lg-3 col-xs-6">
+			<!-- small box -->
+			<div class="small-box bg-aqua">
+				<div class="inner">
+					<h3><?php echo $total_investor; ?></h3>
+
+					<p>Investors</p>
+				</div>
+				<div class="icon">
+					<i class="fa fa-briefcase"></i>
+				</div>
+				<?php echo CHtml::link('More info <i class="fa fa-arrow-circle-right"></i>', array('account/index', 'type'=>'I', 'status'=>'P'), array('class'=>'small-box-footer')); ?>
+			</div>
+		</div>
+		<!-- ./col -->
+		<div class="col-lg-3 col-xs-6">
+			<!-- small box -->
+			<div class="small-box bg-green">
+				<div class="inner">
+					<h3><?php echo $total_borrower; ?></h3>
+
+					<p>Borrowers</p>
+				</div>
+				<div class="icon">
+					<i class="fa fa-user"></i>
+				</div>
+				<?php echo CHtml::link('More info <i class="fa fa-arrow-circle-right"></i>', array('account/index', 'type'=>'B', 'status'=>'P'), array('class'=>'small-box-footer')); ?>
+			</div>
+		</div>
+		<!-- ./col -->
+		<div class="col-lg-3 col-xs-6">
+			<!-- small box -->
+			<div class="small-box bg-yellow">
+				<div class="inner">
+					<h3><?php echo $total_investment; ?></h3>
+
+					<p>Investments</p>
+				</div>
+				<div class="icon">
+					<i class="fa fa-share"></i>
+				</div>
+				<?php echo CHtml::link('More info <i class="fa fa-arrow-circle-right"></i>', array('loan/list', 'status'=>'A'), array('class'=>'small-box-footer')); ?>
+			</div>
+		</div>
+		<!-- ./col -->
+		<div class="col-lg-3 col-xs-6">
+			<!-- small box -->
+			<div class="small-box bg-red">
+				<div class="inner">
+					<h3><?php echo $total_loan; ?></h3>
+
+					<p>Loans</p>
+				</div>
+				<div class="icon">
+					<i class="fa fa-sign-in"></i>
+				</div>
+				<?php echo CHtml::link('More info <i class="fa fa-arrow-circle-right"></i>', array('request/index', 'status'=>'A'), array('class'=>'small-box-footer')); ?>
+			</div>
+		</div>
+		<!-- ./col -->
+	</div>
 </section>
 
 <script type="text/javascript">

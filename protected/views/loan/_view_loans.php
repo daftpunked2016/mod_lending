@@ -1,7 +1,9 @@
+<?php $package = $data->package; ?>
 <tr>
-	<td><?php echo CHtml::encode($data->package_id); ?></td>
-	<td><?php echo CHtml::encode($data->package->interest_rate * 100); ?>%</td>
-	<td><?php echo CHtml::encode($data->package->months_payable); ?> months</td>
+	<td><?php echo CHtml::encode(strtoupper($package->package_name)); ?></td>
+	<td>P <?php echo CHtml::encode(number_format($package->amount, 2)); ?></td>
+	<td><?php echo CHtml::encode($package->interest_rate * 100); ?>%</td>
+	<td><?php echo CHtml::encode($package->months_payable); ?> months</td>
 	<td>
 		<?php
 			switch ($data->status) {

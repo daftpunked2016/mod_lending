@@ -39,6 +39,7 @@
 						<thead class='panel-heading'>
 							<th>SYSTEM ID</th>
 							<th>PACKAGE NAME</th>
+							<th>AMOUNT</th>
 							<th>INTEREST RATE</th>
 							<th>MONTHS PAYABLE</th>
 							<th>STATUS</th>
@@ -49,7 +50,7 @@
 						</tbody>
 					</table>
 					{pager}",
-					'emptyText' => "<tr><td class='text-center' colspan=\"6\">No available entries</td></tr>",
+					'emptyText' => "<tr><td class='text-center' colspan=\"7\">No available entries</td></tr>",
 				));
 			?>
 		</div>

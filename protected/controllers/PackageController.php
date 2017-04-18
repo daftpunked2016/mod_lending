@@ -6,24 +6,52 @@ class PackageController extends Controller
 
 	public function actionList()
 	{
-		$packages = Package::model()->findAll();
+		$packages = Package::model()->adminPackages()->findAll();
 
-		foreach ($packages as $key => $value) {
-			switch ($value->id) {
-				case 1:
-					$packages[$key]['class'] = "bg-gray disabled color-palette";
-					break;
-				case 2:
-					$packages[$key]['class'] = "bg-yellow disabled color-palette";
-					break;
-				default:
-					$packages[$key]['class'] = "bg-gray-active color-palette";
-					break;
+		// foreach ($packages as $key => $value) {
+		// 	switch ($value->id) {
+		// 		case 1:
+		// 			$packages[$key]['class'] = "bg-gray disabled color-palette";
+		// 			break;
+		// 		case 2:
+		// 			$packages[$key]['class'] = "bg-yellow disabled color-palette";
+		// 			break;
+		// 		default:
+		// 			$packages[$key]['class'] = "bg-gray-active color-palette";
+		// 			break;
+		// 	}
+		// }
+
+		$package = new Package;
+
+		if (isset($_POST['Package'])) {
+			$package->attributes = $_POST['Package'];
+			$package->package_name = "CUSTOM PACKAGE";
+			$package->account_id = Yii::app()->user->id;
+
+			$valid = $package->validate();
+
+			if ($valid) {
+				$transaction = Yii::app()->db->beginTransaction();
+
+				try {
+					if ($package->save()) {
+						$transaction->commit();
+						$this->redirect(array('package/apply', 'id'=>$package->id));
+					}
+				} catch (Exception $e) {
+					$transaction->rollback();
+					Yii::app()->user->setFlash('error', 'Posting of Investment failed. Please try again.');
+					$this->redirect(array('package/list'));
+				}
+			} else {
+				Yii::app()->user->setFlash('error', 'Validation failed! Please double check required fields.');
 			}
 		}
 
 		$this->render('list', array(
-			'packages' => $packages
+			'packages' => $packages,
+			'package' => $package,
 		));
 	}
 
@@ -44,12 +72,12 @@ class PackageController extends Controller
 			try {
 				if ($loan->save()) {
 					$transaction->commit();
-					Yii::app()->user->setFlash('success', 'Package application has been sent to Admin. Please wait for the approval. Thank you!');
+					Yii::app()->user->setFlash('success', 'Investment application has been sent to Admin. Please wait for the approval. Thank you!');
 					$this->redirect(array('loan/list'));
 				}
 			} catch (Exception $e) {
 				$transaction->rollback();
-				Yii::app()->user->setFlash('error', 'Package application failed. Please try again.');
+				Yii::app()->user->setFlash('error', 'Investment application failed. Please try again.');
 				$this->redirect(array('package/list'));
 			}
 		}

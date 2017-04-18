@@ -1,5 +1,4 @@
 <tr>
-	<td><?php echo CHtml::encode($data->id); ?></td>
 	<td><?php echo CHtml::encode(strtoupper($data->package_name)); ?></td>
 	<td><?php echo "P ".CHtml::encode(number_format($data->amount, 2)); ?></td>
 	<td><?php echo CHtml::encode($data->interest_rate); ?></td>

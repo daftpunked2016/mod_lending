@@ -6,7 +6,7 @@ class PackageController extends Controller
 
 	public function actionIndex()
 	{	
-		$packages = Package::model()->findAll();
+		$packages = Package::model()->adminPackages()->findAll();
 		$packagesDP = new CArrayDataProvider($packages, array(
 			'pagination' => array(
 				'pageSize' => 10
@@ -14,11 +14,11 @@ class PackageController extends Controller
 		));
 
 		#Method count package -- This will be used to restrict button create if reached to 3
-		$package_count = count($packagesDP->rawData);
+		// $package_count = count($packagesDP->rawData);
 
 		$this->render('index', array(
 			'packagesDP' => $packagesDP,
-			'package_count' => $package_count
+			// 'package_count' => $package_count
 		));
 	}
 

@@ -34,8 +34,8 @@
 				<!-- Widget: user widget style 1 -->
 				<div class="box box-widget widget-user">
 					<!-- Add the bg color to the header using any of the bg-* classes -->
-					<div class="widget-user-header <?php echo $val->class; ?>">
-						<h3 class="widget-user-username">P <?php echo number_format($val->amount, 2); ?></h3>
+					<div class="widget-user-header <?php //echo $val->class; ?>bg-red disabled color-palette">
+						<h3 class="widget-user-username"><strong>P <?php echo number_format($val->amount, 2); ?></strong></h3>
 						<h5 class="widget-user-desc"><?php echo strtoupper($val->package_name); ?> PACKAGE</h5>
 					</div>
 					<!-- <div class="widget-user-image"> -->
@@ -70,15 +70,102 @@
 				<!-- /.widget-user -->
 			</div>
 		<?php endforeach; ?>
+		<div class="col-md-4">
+			<!-- Widget: user widget style 1 -->
+			<div class="box box-widget widget-user">
+				<!-- Add the bg color to the header using any of the bg-* classes -->
+				<div class="widget-user-header <?php //echo $val->class; ?>bg-blue disabled color-palette">
+					<h3 class="widget-user-username"><strong>CUSTOM PACKAGE</strong></h3>
+					<h5 class="widget-user-desc">Customize your own Package</h5>
+				</div>
+				<div class="box-footer">
+					<div class="row">
+						<div class="col-sm-12 text-center">
+							<div class="description-block">
+								<?php echo CHtml::link("<i class='fa fa-plus'></i> CREATE PACKAGE", "javascript:void(0);", array('class'=>'btn btn-lg btn-primary btn-flat', 'data-toggle'=>'modal', 'data-target'=>'.bs-example-modal-lg',)); ?>
+							</div>
+						</div>
+					</div>
+					<!-- /.row -->
+				</div>
+			</div>
+			<!-- /.widget-user -->
+		</div>
 	</div>
 </section>
+
+<!-- Large modal -->
+<div id="view-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content" id="modal-content">
+    	
+    	<?php 
+          $form=$this->beginWidget('CActiveForm', array(
+            'id'=>'package-form',
+            // Please note: When you enable ajax validation, make sure the corresponding
+            // controller action is handling ajax validation correctly.
+            // There is a call to performAjaxValidation() commented in generated controller code.
+            // See class documentation of CActiveForm for details on this.
+            'enableAjaxValidation'=>false,
+          ));
+        ?>
+    	<div class="modal-header label-danger">
+		    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="gridSystemModalLabel">
+				<strong>Custom Package</strong>
+			</h4>
+		</div>
+		<div class="modal-body">
+			<div class="text-center">
+				<p class="note">Fields with <span class="required">*</span> are required.</p>
+			</div>
+			
+			<div class="form-group">
+				<?php echo $form->labelEx($package, 'amount'); ?>
+				<?php echo $form->numberField($package,'amount',array('size'=>128,'maxlength'=>128, 'class'=>'form-control', 'placeholder'=>'Amount')); ?>
+				<?php echo $form->error($package,'amount', array('style'=>'color: red;')); ?>
+			</div>
+
+			<div class="form-group">
+				<?php echo $form->labelEx($package, 'interest_rate'); ?>
+				<?php echo $form->textField($package,'interest_rate',array('size'=>128,'maxlength'=>128, 'class'=>'form-control', 'placeholder'=>'Interest Rate (%)')); ?>
+				<?php echo $form->error($package,'interest_rate', array('style'=>'color: red;')); ?>
+			</div>
+
+			<div class="form-group">
+				<?php echo $form->labelEx($package, 'months_payable'); ?>
+				<?php echo $form->numberField($package,'months_payable',array('size'=>128,'maxlength'=>128, 'class'=>'form-control', 'placeholder'=>'Months Payable')); ?>
+				<?php echo $form->error($package,'months_payable', array('style'=>'color: red;')); ?>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<div class="pull-left">
+				<?php echo CHtml::link('Close', 'javascript:void(0);', array('data-dismiss'=>'modal', 'class'=>'btn btn-danger btn-flat')); ?>
+			</div>
+			<div class="pull-right">
+				<?php echo CHtml::submitButton($package->isNewRecord ? 'Create' : 'Save', array('class'=>'btn btn-danger btn-flat pull-right', 'id'=>'btn-submit', 'tabindex'=>4)); ?>
+			</div>
+		</div>
+
+		<?php $this->endWidget(); ?>
+    </div>
+  </div>
+</div>
 
 <script type="text/javascript">
 $(function() {
 	$('#package').addClass('active');
 
+	var button_bool = true;
 	$('.post-investment').click(function() {
-		$(this).removeClass("text-red").addClass("text-yellow").html('<h5><i class="fa fa-spinner fa-spin"></i></h5><small class="description-text">PROCESSING</small>')
+
+		if (!button_bool) {
+			return false;			
+		}
+
+		$(this).removeClass("text-red").addClass("text-yellow").html('<h5><i class="fa fa-spinner fa-spin"></i></h5><small class="description-text">PROCESSING</small>');
+
+		button_bool = false;
 	});
 });
 </script>

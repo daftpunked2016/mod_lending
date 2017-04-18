@@ -28,8 +28,7 @@
 </section>
 
 <section class="content">
-	<!--  -->
-	<?php if ($package_count < 3): ?>
+	<?php //if ($package_count < 3): ?>
 		<div class="row">
 			<div class="col-md-6"></div>
 			<div class="col-md-6">
@@ -37,7 +36,7 @@
 			</div>
 		</div>
 		<br>
-	<?php endif; ?>
+	<?php //endif; ?>
 	<div class="box box-solid">
 		<div class="box-body">
 			<?php
@@ -47,7 +46,6 @@
   					'template' => "{sorter}
   					<table class='table table-hover table-striped'>
   						<thead class='panel-heading'>
-  							<th>#</th>
   							<th>Package Name</th>
   							<th>Amount</th>
   							<th>Interest</th>

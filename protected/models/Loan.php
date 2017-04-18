@@ -136,14 +136,15 @@ class Loan extends CActiveRecord
 	{	
 		$service_fee = $this->getServiceFee($data);
 
-		return ($data->amount + ($data->amount * $data->interest_rate))  + $service_fee;
+		// return ($data->amount + ($data->amount * $data->interest_rate))  + $service_fee;
+		return $data->amount + $service_fee;
 	}
 
 	#data = package data
 	public function getPerMonthTotal($data)
 	{	
-		$service_fee = $this->getServiceFee($data);
+		$total = $this->getTotal($data);
 
-		return ($data->amount / $data->months_payable) + $service_fee;
+		return $total / $data->months_payable;
 	}
 }

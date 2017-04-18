@@ -1,12 +1,14 @@
+<?php $package = $data->package; ?>
 <tr>
 	<td>
 		<strong>
 			<?php echo CHtml::encode($data->account->user->id_name); ?>
 		</strong>
 	</td>
-	<td><?php echo CHtml::encode(strtoupper($data->package->package_name)); ?></td>
-	<td><?php echo CHtml::encode($data->package->interest_rate); ?>%</td>
-	<td><?php echo CHtml::encode($data->package->months_payable); ?> mos.</td>
+	<td><?php echo CHtml::encode(strtoupper($package->package_name)); ?></td>
+	<td>P <?php echo CHtml::encode(number_format($package->amount, 2)); ?></td>
+	<td><?php echo CHtml::encode($package->interest_rate); ?>%</td>
+	<td><?php echo CHtml::encode($package->months_payable); ?> mos.</td>
 	<td>
 		<?php
 			switch ($data->status) {

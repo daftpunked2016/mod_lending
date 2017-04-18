@@ -31,7 +31,7 @@
 	<div class="row">
 		<div class="col-md-6"></div>
 		<div class="col-md-6">
-			<?php echo CHtml::link("<i class='fa fa-briefcase'></i> Packages", array('package/list'), array('class'=>'btn btn-danger btn-flat pull-right')); ?>
+			<?php echo CHtml::link("<i class='fa fa-briefcase'></i> VIEW PACKAGES", array('package/list'), array('class'=>'btn btn-danger btn-flat pull-right')); ?>
 		</div>
 	</div>
 	<br>
@@ -44,7 +44,8 @@
 					'template' => "{sorter}
 					<table id=\"example1\" class=\"table table-bordered table-hover\">
 						<thead class='panel-heading'>
-							<th>PACKAGE #</th>
+							<th>PACKAGE NAME</th>
+							<th>AMOUNT</th>
 							<th>INTEREST RATE</th>
 							<th>MONTHS PAYABLE</th>
 							<th>STATUS</th>
@@ -55,7 +56,7 @@
 						</tbody>
 					</table>
 					{pager}",
-					'emptyText' => "<tr><td class='text-center' colspan=\"5\">No available entries</td></tr>",
+					'emptyText' => "<tr><td class='text-center' colspan=\"6\">No available entries</td></tr>",
 				));
 			?>
 		</div>

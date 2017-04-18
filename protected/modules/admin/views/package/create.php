@@ -79,6 +79,10 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
-		$('#content_management').addClass('active');
+		$('#package').addClass('active');
+
+		$('#btn-submit').on('click', function() {
+			$(this).removeClass('btn-primary').addClass('btn-warning disabled').val('Processing');
+		});
 	});
 </script>

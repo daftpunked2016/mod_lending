@@ -19,14 +19,14 @@
       <li id="dashboard" class="">
         <?php echo CHtml::link('<i class="fa fa-dashboard text-red"></i> <span>Dashboard</span>', array('account/dashboard')); ?>
       </li>
+      <li id="mailbox" class="">
+        <?php echo CHtml::link('<i class="fa fa-envelope text-red"></i> <span>Mailbox</span>', array('message/index', 'folder'=>'inbox')); ?>
+      </li>
       <li id="package">
         <?php echo CHtml::link('<i class="fa fa-briefcase text-red"></i> <span>Packages</span>', array('package/list')); ?>
       </li>
       <li id="investment">
-        <?php echo CHtml::link('<i class="fa fa-list text-red"></i> <span>Investments</span>', array('loan/list')); ?>
-      </li>
-      <li id="mailbox" class="">
-        <?php echo CHtml::link('<i class="fa fa-envelope text-red"></i> <span>Mailbox</span>', array('message/index', 'folder'=>'inbox')); ?>
+        <?php echo CHtml::link('<i class="fa fa-share text-red"></i> <span>Investments</span>', array('loan/list')); ?>
       </li>
     </ul>
   </section>

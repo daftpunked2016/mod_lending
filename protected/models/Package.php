@@ -4,7 +4,8 @@
  * This is the model class for table "package".
  *
  * The followings are the available columns in table 'package':
- * @property integer $id
+ * @property string $id
+ * @property string $account_id
  * @property string $package_name
  * @property string $amount
  * @property string $interest_rate
@@ -30,14 +31,15 @@ class Package extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('package_name, amount, interest_rate, months_payable', 'required'),
+			array('account_id, package_name, amount, interest_rate, months_payable', 'required'),
 			array('months_payable', 'numerical', 'integerOnly'=>true),
+			array('account_id', 'length', 'max'=>11),
 			array('package_name', 'length', 'max'=>32),
 			array('amount', 'length', 'max'=>128),
 			array('interest_rate', 'length', 'max'=>5),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, package_name, amount, interest_rate, months_payable', 'safe', 'on'=>'search'),
+			array('id, account_id, package_name, amount, interest_rate, months_payable', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -49,6 +51,16 @@ class Package extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'account' => array(self::BELONGS_TO, 'Account', 'account_id'),
+		);
+	}
+
+	public function scopes()
+	{
+		return array(
+			'adminPackages' => array(
+				'condition' => 't.account_id = 1',
+			),
 		);
 	}
 
@@ -59,6 +71,7 @@ class Package extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
+			'account_id' => 'Account',
 			'package_name' => 'Package Name',
 			'amount' => 'Amount',
 			'interest_rate' => 'Interest Rate',
@@ -84,7 +97,8 @@ class Package extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id);
+		$criteria->compare('id',$this->id,true);
+		$criteria->compare('account_id',$this->account_id,true);
 		$criteria->compare('package_name',$this->package_name,true);
 		$criteria->compare('amount',$this->amount,true);
 		$criteria->compare('interest_rate',$this->interest_rate,true);
