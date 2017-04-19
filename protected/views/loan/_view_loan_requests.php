@@ -7,7 +7,7 @@
 	<td><?php echo CHtml::encode($investor_data->user->id_name); ?></td>
 	<td>P <?php echo CHtml::encode(number_format($package->amount, 2)); ?></td>
 	<td><?php echo CHtml::encode($package->interest_rate * 100); ?>%</td>
-	<td><?php echo CHtml::encode($package->months_payable); ?>%</td>
+	<td><?php echo CHtml::encode($package->months_payable); ?> month/s</td>
 	<td>
 		<?php
 			switch ($data->status) {
@@ -30,6 +30,6 @@
 			}
 		?>
 
-		<?php echo CHtml::link('View Computation', 'javascript:void(0);', array('class'=>'btn-sm btn-primary view-computation', 'data-toggle'=>'modal', 'data-target'=>'.bs-example-modal-lg', 'title'=>'Apply for Loan', 'data-url'=>Yii::app()->createUrl('loan/computation', array('id'=>$data->loan_id, 'viewing'=>true)))); ?>
+		<?php echo CHtml::link('View Computation', 'javascript:void(0);', array('class'=>'btn-sm btn-primary view-computation', 'data-toggle'=>'modal', 'data-target'=>'.computation', 'title'=>'Apply for Loan', 'data-url'=>Yii::app()->createUrl('loan/computation', array('id'=>$data->loan_id, 'viewing'=>true)))); ?>
 	</td>
 </tr>

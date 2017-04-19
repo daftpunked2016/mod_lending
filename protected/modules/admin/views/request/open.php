@@ -1,13 +1,13 @@
 <section class="content-header">
 	<h1>
-		Loans
-		<small>list</small>
+		Loan Requests
+		<small>open</small>
 	</h1>
 	<ol class="breadcrumb">
 		<li>
-			<?php echo CHtml::link('Loans', array('loan/index')); ?>
+			<?php echo CHtml::link('Loan Requests', array('request/open')); ?>
 		</li>
-		<li class="active">List</li>
+		<li class="active">Open</li>
 	</ol>
 	<br>
 	<?php 
@@ -30,37 +30,36 @@
 <section class="content">
 	<div class="box box-solid">
 		<div class="box-body">
-			<div class="table-responsive">
-				<?php  
-					$this->widget('zii.widgets.CListView', array(
-						'dataProvider'=>$loan_requestsDP,
-						'itemView'=>'_view_loan_requests',
-						'template' => "{sorter}
-						<table id=\"example1\" class=\"table table-bordered table-hover\">
-							<thead class='panel-heading'>
-								<th>SYSTEM ID</th>
-								<th>AMOUNT</th>
-								<th>INTEREST RATE</th>
-								<th>MONTHS PAYABLE</th>
-								<th>STATUS</th>
-								<th class='text-center'>Actions</th>
-							</thead>
-							<tbody>
-								{items}
-							</tbody>
-						</table>
-						{pager}",
-						'emptyText' => "<tr><td class='text-center' colspan=\"5\">No available entries</td></tr>",
-					));
-				?>
-			</div>
+			<?php  
+				$this->widget('zii.widgets.CListView', array(
+					'dataProvider'=>$open_requestDP,
+					'itemView'=>'_view_open',
+					'template' => "{sorter}
+					<table id=\"example1\" class=\"table table-bordered table-hover\">
+						<thead class='panel-heading'>
+							<th>SYSTEM ID</th>
+							<th>AMOUNT</th>
+							<th>INTEREST RATE</th>
+							<th>MONTHS PAYABLE</th>
+							<th>INVITATION STATUS</th>
+							<th>STATUS</th>
+							<th class='text-center' width='15%'>Actions</th>
+						</thead>
+						<tbody>
+							{items}
+						</tbody>
+					</table>
+					{pager}",
+					'emptyText' => "<tr><td class='text-center' colspan=\"7\">No available entries</td></tr>",
+				));
+			?>
 		</div>
 	</div>
 </section>
 
 <!-- Large modal -->
-<div id="view-modal" class="modal fade bs-example-modal-lg computation" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-  <div class="modal-dialog modal-md" role="document">
+<div id="view-modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content" id="modal-content">
     	<!-- start content here -->
     </div>
@@ -69,9 +68,9 @@
 
 <script type="text/javascript">
 $(function() {
-	$('#loans').addClass('active');
+	$('.request-open').addClass('active');
 
-	$('.view-computation').click(function() {
+	$('.view-account').click(function() {
 		var url = $(this).data('url');
 
 		$.ajax({

@@ -41,16 +41,21 @@ class LoanController extends Controller
 	{	
 		$loan = Loan::model()->findByPk($id);
 
-		#Method delete package record if investor cancel his custom investment package
-		if ($loan->package->account_id === Yii::app()->user->id) {
-			$loan->package->delete();
-			$loan->package->save();
-		}
+		if ($loan->status === "P") {
+			#Method delete package record if investor cancel his custom investment package
+			if ($loan->package->account_id === Yii::app()->user->id) {
+				$loan->package->delete();
+				$loan->package->save();
+			}
 
-		$loan->delete();
+			$loan->delete();
 
-		if ($loan->save()) {
-			Yii::app()->user->setFlash('success', 'Loan application has been cancelled.');
+			if ($loan->save()) {
+				Yii::app()->user->setFlash('success', 'Investment application has been cancelled.');
+				$this->redirect(array('loan/list'));
+			}
+		} else {
+			Yii::app()->user->setFlash('error', 'Investment application has been processed. Please contact system Administrator for details.');
 			$this->redirect(array('loan/list'));
 		}
 	}
@@ -131,8 +136,8 @@ class LoanController extends Controller
 	{
 		$request = LoanRequest::model()->findByPk($id);
 
-		if ($request->status === "A") {
-			Yii::app()->user->setFlash('error', 'Your Loan Request is been Approved. Please contact System Administrator for more details.');
+		if ($request->status === "A" || $request->status === "R") {
+			Yii::app()->user->setFlash('error', 'Your Loan Request has been processed. Please contact System Administrator for more details.');
 			$this->redirect(array('loan/index'));
 		}
 
@@ -144,12 +149,127 @@ class LoanController extends Controller
 		}
 	}
 
-	public function actionPostRequest()
+	public function actionOpen()
 	{
-
-
-		$this->render('post_request', array(
-
+		$open_request_data = OpenRequest::model()->findAll(array('condition'=>'borrower_id = :bid', 'params'=>array(':bid'=>Yii::app()->user->id)));
+		$open_requestDP = new CArrayDataProvider($open_request_data, array(
+			'pagination' => array(
+				'pageSize' => 10
+			)
 		));
+
+		#Method create custom package for open request
+		$package = new Package;
+		$open_request = new OpenRequest;
+
+		if (isset($_POST['Package'])) {
+			$package->attributes = $_POST['Package'];
+			$package->package_name = "CUSTOM PACKAGE";
+			$package->account_id = Yii::app()->user->id;
+
+			$valid = $package->validate();
+
+			if ($valid) {
+				$transaction = Yii::app()->db->beginTransaction();
+
+				try {
+					if ($package->save()) {
+						$open_request->package_id = $package->id;
+
+						if ($open_request->save()) {
+							$transaction->commit();
+							Yii::app()->user->setFlash('success', 'Posting of Loan Request Complete!');
+							$this->redirect(array('loan/open'));
+						}
+					}
+				} catch (Exception $e) {
+					$transaction->rollback();
+					Yii::app()->user->setFlash('error', 'Posting of Loan Request failed. Please contact system developer.');
+					$this->redirect(array('loan/index'));
+				}
+			} else {
+				Yii::app()->user->setFlash('error', 'Validation Failed! Please check required fields and try again.');
+			}
+		}
+
+		$this->render('open_request', array(
+			'open_requestDP' => $open_requestDP,
+			'package' => $package
+		));
+	}
+
+	public function actionCancelRequest($id)
+	{
+		$request = OpenRequest::model()->findByPk($id);
+
+		if (!empty($request)) {
+			if ($request->status === "P") {
+
+				#Method delete package data
+				$request->package->delete();
+				$request->package->save();
+
+				$request->delete();
+
+				if ($request->save()) {
+					Yii::app()->user->setFlash('success', 'Posting of Loan Request has been cancelled.');
+					$this->redirect(array('loan/open'));
+				}
+			} else {
+				Yii::app()->user->setFlash('error', 'Posting of Loan Request has already been processed. Please contact System Administrator for more details.');
+				$this->redirect(array('loan/open'));
+			}
+		}
+	}
+
+	public function actionOpenList()
+	{
+		$requests = OpenRequest::model()->isOpen()->isApproved()->findAll();
+		$requestsDP = new CArrayDataProvider($requests, array(
+			'pagination' => array(
+				'pageSize' => 10
+			)
+		));
+
+		$this->render('openlist', array(
+			'requestsDP' => $requestsDP
+		));
+	}
+
+	public function actionInvite($id)
+	{
+		$request = OpenRequest::model()->findByPk($id);
+
+		$loan = new Loan;
+
+		#Method assign attributes
+		$loan->account_id = Yii::app()->user->id;
+		$loan->package_id = $request->package_id;
+		$loan->status = "I"; #INVITATION
+		$loan->date_created = date('Y-m-d H:i');
+
+		$valid = $loan->validate();
+
+		if ($valid) {
+			$transaction = Yii::app()->db->beginTransaction();
+
+			try {
+				if ($loan->save()) {
+					$request->loan_id = $loan->id;
+
+					if ($request->save()) {
+						$transaction->commit();
+						Yii::app()->user->setFlash('success', 'Push Invite Complete!');
+						$this->redirect(array('loan/openlist'));
+					}
+				}
+			} catch (Exception $e) {
+				$transaction->rollback();
+				Yii::app()->user->setFlash('error', 'Push Invite failed! Please contact system developer.');
+				$this->redirect(array('loan/openlist'));
+			}
+		} else {
+			Yii::app()->user->setFlash('error', 'Validation failed! Please double check required fields and try again.');
+		}
 	}
 }

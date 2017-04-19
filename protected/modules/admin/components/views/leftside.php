@@ -110,7 +110,7 @@
         </a>
         <ul class="treeview-menu" style="display: block;">
           <li class="request-open">
-            <?php echo CHtml::link('<i class="fa fa-genderless text-red"></i> Open', array('request/index', 'status'=>'O')); ?>
+            <?php echo CHtml::link('<i class="fa fa-genderless text-red"></i> Open', array('request/open')); ?>
           </li>
           <li class="request-pending">
             <?php echo CHtml::link('<i class="fa fa-question text-red"></i> Pending', array('request/index', 'status'=>'P')); ?>

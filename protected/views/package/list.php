@@ -30,7 +30,7 @@
 <section class="content">
 	<div class="row">
 		<?php foreach ($packages as $val): ?>
-			<div class="col-md-4">
+			<div class="col-md-4 col-xs-12 col-sm-6">
 				<!-- Widget: user widget style 1 -->
 				<div class="box box-widget widget-user">
 					<!-- Add the bg color to the header using any of the bg-* classes -->
@@ -70,7 +70,7 @@
 				<!-- /.widget-user -->
 			</div>
 		<?php endforeach; ?>
-		<div class="col-md-4">
+		<div class="col-md-4 col-xs-12 col-sm-6">
 			<!-- Widget: user widget style 1 -->
 			<div class="box box-widget widget-user">
 				<!-- Add the bg color to the header using any of the bg-* classes -->
@@ -82,7 +82,7 @@
 					<div class="row">
 						<div class="col-sm-12 text-center">
 							<div class="description-block">
-								<?php echo CHtml::link("<i class='fa fa-plus'></i> CREATE PACKAGE", "javascript:void(0);", array('class'=>'btn btn-lg btn-primary btn-flat', 'data-toggle'=>'modal', 'data-target'=>'.bs-example-modal-lg',)); ?>
+								<?php echo CHtml::link("<i class='fa fa-plus'></i> CREATE PACKAGE", "javascript:void(0);", array('class'=>'btn btn-lg btn-primary btn-flat', 'data-toggle'=>'modal', 'data-target'=>'.bs-example-modal-lg')); ?>
 							</div>
 						</div>
 					</div>
@@ -143,7 +143,7 @@
 				<?php echo CHtml::link('Close', 'javascript:void(0);', array('data-dismiss'=>'modal', 'class'=>'btn btn-danger btn-flat')); ?>
 			</div>
 			<div class="pull-right">
-				<?php echo CHtml::submitButton($package->isNewRecord ? 'Create' : 'Save', array('class'=>'btn btn-danger btn-flat pull-right', 'id'=>'btn-submit', 'tabindex'=>4)); ?>
+				<?php echo CHtml::submitButton($package->isNewRecord ? 'Post Investment' : 'Save', array('class'=>'btn btn-danger btn-flat pull-right', 'id'=>'btn-submit', 'tabindex'=>4)); ?>
 			</div>
 		</div>
 
@@ -166,6 +166,10 @@ $(function() {
 		$(this).removeClass("text-red").addClass("text-yellow").html('<h5><i class="fa fa-spinner fa-spin"></i></h5><small class="description-text">PROCESSING</small>');
 
 		button_bool = false;
+	});
+
+	$('#btn-submit').click(function() {
+		$(this).removeClass('btn-danger').addClass('btn-warning disabled').val("Processing")
 	});
 });
 </script>

@@ -29,10 +29,19 @@
 </div>
 
 <div class="form-group has-feedback">
-	<?php echo $form->passwordField($model,'password', array('class'=>'form-control', 'placeholder'=>'Password')); ?><span class="glyphicon glyphicon-lock form-control-feedback"></span>
-	<?php echo $form->error($model,'password'); ?>
+  <?php echo $form->passwordField($model,'password', array('class'=>'form-control', 'placeholder'=>'Password')); ?><span class="glyphicon glyphicon-lock form-control-feedback"></span>
+  <?php echo $form->error($model,'password'); ?>
 </div>
 
+<div class="form-group has-feedback">
+  <div class="checkbox icheck">
+    <label>
+      <?php echo $form->checkBox($model,'rememberMe'); ?>
+      <?php echo $form->label($model,'rememberMe'); ?>
+      <?php echo $form->error($model,'rememberMe'); ?>
+    </label>
+  </div>
+</div>
 
 <div class="form-group has-feedback">
 	<?php echo CHtml::submitButton('Sign in', array('class'=>'btn btn-primary btn-block btn-flat')); ?>

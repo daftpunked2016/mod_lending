@@ -24,7 +24,7 @@
   <body class="login-page">
     <div class="login-box">
       <div class="login-logo">
-        <?php echo CHtml::link('<strong class="text-green">Admin</strong>Login', array('default/login')) ?>
+        <?php echo CHtml::link('<strong class="text-red">Admin</strong>Login', array('default/login')) ?>
       </div><!-- /.login-logo -->
 
       <div class="login-box-body">

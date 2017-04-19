@@ -34,24 +34,36 @@ class LoanController extends Controller
 	public function actionApprove($id)
 	{
 		$loan = Loan::model()->findByPk($id);
-		$old_status = $loan->status;
-		$loan->status = "A";
+		
+		if (!empty($loan)) {
+			$old_status = $loan->status;
+			$loan->status = "A";
 
-		if ($loan->save()) {
-			Yii::app()->user->setFlash('success', 'Loan application approved.');
-			$this->redirect(array('loan/list', 'status'=>$old_status));
+			if ($loan->save()) {
+				Yii::app()->user->setFlash('success', 'Investment application Approved.');
+				$this->redirect(array('loan/list', 'status'=>$old_status));
+			}
+		} else {
+			Yii::app()->user->setFlash('error', 'Investment application has been removed or cancelled by the Investor.');
+			$this->redirect(array('loan/list', 'status'=>'P'));
 		}
 	}
 
 	public function actionReject($id)
 	{
 		$loan = Loan::model()->findByPk($id);
-		$old_status = $loan->status;
-		$loan->status = "R";
+		
+		if (!empty($loan)) {
+			$old_status = $loan->status;
+			$loan->status = "R";
 
-		if ($loan->save()) {
-			Yii::app()->user->setFlash('success', 'Loan application rejected.');
-			$this->redirect(array('loan/list', 'status'=>$old_status));
+			if ($loan->save()) {
+				Yii::app()->user->setFlash('success', 'Investment application Rejected.');
+				$this->redirect(array('loan/list', 'status'=>$old_status));
+			}
+		} else {
+			Yii::app()->user->setFlash('error', 'Investment application has been removed or cancelled by the Investor.');
+			$this->redirect(array('loan/list', 'status'=>'P'));
 		}
 	}
 }

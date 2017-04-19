@@ -28,6 +28,9 @@
       <li id="investment">
         <?php echo CHtml::link('<i class="fa fa-share text-red"></i> <span>Investments</span>', array('loan/list')); ?>
       </li>
+      <li id="open_request">
+        <?php echo CHtml::link('<i class="fa fa-sign-out text-red"></i> <span>Loan Requests</span>', array('loan/openlist')); ?>
+      </li>
     </ul>
   </section>
   <!-- /.sidebar -->
