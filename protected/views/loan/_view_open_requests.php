@@ -9,7 +9,7 @@
 			if ($data->loan_id) {
 				echo CHtml::link('View Invitation', "javascript:void(0);", array('class'=>'btn-sm btn-primary'));
 			} else {
-				echo "<span class='label label-warning'> Pending </span>";
+				echo "<span class='label label-warning'> <span class='fa fa-refresh fa-spin'></span> Waiting for Invite </span>";
 			}
 		?>
 	</td>

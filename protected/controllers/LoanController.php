@@ -63,12 +63,34 @@ class LoanController extends Controller
 	public function actionInvestments()
 	{
 		#Method validate if investment request is pending
-		if (LoanRequest::model()->count(array('condition'=>'borrower_id = :borrower_id AND status = "P"', 'params'=>array(':borrower_id'=>Yii::app()->user->id)))) {
-			Yii::app()->user->setFlash('error', 'You have a pending loan request. Please wait for System administrator for clearance.');
-			$this->redirect(array('account/dashboard'));
+		$this->check_pending_loan();
+
+		$condition = "";
+		$search_filters = 0;
+		if (!empty($_GET['search'])) {
+
+			#Method redirect if search filter is empty
+			if (empty($_GET['search']['amount']) && empty($_GET['search']['interest_rate']) && empty($_GET['search']['months_payable'])) {
+				Yii::app()->user->setFlash('error', 'Please enter atleast 1 search filter.');
+				$this->redirect(array('loan/investments'));
+			} else {
+				$search_filters = 1;
+			}
+
+			if (!empty($_GET['search']['amount'])) {
+				$condition = " AND package.amount = {$_GET['search']['amount']}";
+			}
+
+			if (!empty($_GET['search']['interest_rate'])) {
+				$condition = " AND package.interest_rate = {$_GET['search']['interest_rate']}";
+			}
+
+			if (!empty($_GET['search']['months_payable'])) {
+				$condition = " AND package.months_payable = {$_GET['search']['months_payable']}";
+			}
 		}
 
-		$investments = Loan::model()->isApproved()->findAll(array('condition'=>'id NOT IN (SELECT loan_id FROM loan_request WHERE status IN ("A", "P"))'));
+		$investments = Loan::model()->isApproved()->with('package')->findAll(array('condition'=>'t.id NOT IN (SELECT loan_id FROM loan_request WHERE status IN ("A", "P"))'.$condition));
 		$investmentsDP = new CArrayDataProvider($investments, array(
 			'pagination' => array(
 				'pageSize' => 10
@@ -76,7 +98,8 @@ class LoanController extends Controller
 		));
 
 		$this->render('investments', array(
-			'investmentsDP' => $investmentsDP
+			'investmentsDP' => $investmentsDP,
+			'search_filters' => $search_filters
 		));
 	}
 
@@ -151,6 +174,9 @@ class LoanController extends Controller
 
 	public function actionOpen()
 	{
+		#Method check pending loan
+		$this->check_pending_loan();
+
 		$open_request_data = OpenRequest::model()->findAll(array('condition'=>'borrower_id = :bid', 'params'=>array(':bid'=>Yii::app()->user->id)));
 		$open_requestDP = new CArrayDataProvider($open_request_data, array(
 			'pagination' => array(
@@ -224,7 +250,33 @@ class LoanController extends Controller
 
 	public function actionOpenList()
 	{
-		$requests = OpenRequest::model()->isOpen()->isApproved()->findAll();
+		$condition = "1";
+		$search_filters = 0;
+
+		if (!empty($_GET['search'])) {
+
+			#Method redirect if search filter is empty
+			if (empty($_GET['search']['amount']) && empty($_GET['search']['interest_rate']) && empty($_GET['search']['months_payable'])) {
+				Yii::app()->user->setFlash('error', 'Please enter atleast 1 search filter.');
+				$this->redirect(array('loan/openlist'));
+			} else {
+				$search_filters = 1;
+			}
+
+			if (!empty($_GET['search']['amount'])) {
+				$condition = "package.amount = {$_GET['search']['amount']}";
+			}
+
+			if (!empty($_GET['search']['interest_rate'])) {
+				$condition = "package.interest_rate = {$_GET['search']['interest_rate']}";
+			}
+
+			if (!empty($_GET['search']['months_payable'])) {
+				$condition = "package.months_payable = {$_GET['search']['months_payable']}";
+			}
+		}
+
+		$requests = OpenRequest::model()->isOpen()->isApproved()->with('package')->findAll(array('condition'=>$condition));
 		$requestsDP = new CArrayDataProvider($requests, array(
 			'pagination' => array(
 				'pageSize' => 10
@@ -232,7 +284,8 @@ class LoanController extends Controller
 		));
 
 		$this->render('openlist', array(
-			'requestsDP' => $requestsDP
+			'requestsDP' => $requestsDP,
+			'search_filters' => $search_filters
 		));
 	}
 
@@ -271,5 +324,15 @@ class LoanController extends Controller
 		} else {
 			Yii::app()->user->setFlash('error', 'Validation failed! Please double check required fields and try again.');
 		}
+	}
+
+	public function check_pending_loan()
+	{
+		if (LoanRequest::model()->count(array('condition'=>'borrower_id = :borrower_id AND status = "P"', 'params'=>array(':borrower_id'=>Yii::app()->user->id)))) {
+			Yii::app()->user->setFlash('error', 'You have a pending loan request. Please wait for System administrator for clearance.');
+			$this->redirect(array('account/dashboard'));
+		}
+
+		return true;
 	}
 }

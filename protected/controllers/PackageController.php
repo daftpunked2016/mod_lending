@@ -6,21 +6,31 @@ class PackageController extends Controller
 
 	public function actionList()
 	{
-		$packages = Package::model()->adminPackages()->findAll();
+		$condition = "";
+		$search_filters = 0;
+		if (!empty($_GET['search'])) {
+			#Method redirect if search filter is empty
+			if (empty($_GET['search']['amount']) && empty($_GET['search']['interest_rate']) && empty($_GET['search']['months_payable'])) {
+				Yii::app()->user->setFlash('error', 'Please enter atleast 1 search filter.');
+				$this->redirect(array('loan/investments'));
+			} else {
+				$search_filters = 1;
+			}
 
-		// foreach ($packages as $key => $value) {
-		// 	switch ($value->id) {
-		// 		case 1:
-		// 			$packages[$key]['class'] = "bg-gray disabled color-palette";
-		// 			break;
-		// 		case 2:
-		// 			$packages[$key]['class'] = "bg-yellow disabled color-palette";
-		// 			break;
-		// 		default:
-		// 			$packages[$key]['class'] = "bg-gray-active color-palette";
-		// 			break;
-		// 	}
-		// }
+			if (!empty($_GET['search']['amount'])) {
+				$condition = "t.amount = {$_GET['search']['amount']}";
+			}
+
+			if (!empty($_GET['search']['interest_rate'])) {
+				$condition = "t.interest_rate = {$_GET['search']['interest_rate']}";
+			}
+
+			if (!empty($_GET['search']['months_payable'])) {
+				$condition = "t.months_payable = {$_GET['search']['months_payable']}";
+			}
+		}
+
+		$packages = Package::model()->adminPackages()->findAll(array('condition'=>$condition));
 
 		$package = new Package;
 
@@ -52,6 +62,7 @@ class PackageController extends Controller
 		$this->render('list', array(
 			'packages' => $packages,
 			'package' => $package,
+			'search_filters' => $search_filters,
 		));
 	}
 

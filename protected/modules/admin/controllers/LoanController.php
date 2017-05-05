@@ -6,7 +6,13 @@ class LoanController extends Controller
 
 	public function actionList($status)
 	{
-		$loans = Loan::model()->findAll(array('condition'=>'status = :s', 'params'=>array(':s'=>$status)));
+		
+		if ($status == "A") {
+			$loans = Loan::model()->findAll(array('condition'=>'status IN ("A", "I")'));
+		} else {
+			$loans = Loan::model()->findAll(array('condition'=>'status = :s', 'params'=>array(':s'=>$status)));
+		}
+
 		$loansDP = new CArrayDataProvider($loans, array(
 			'pagination' => array(
 				'pageSize' => 10

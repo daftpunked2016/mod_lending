@@ -31,7 +31,7 @@ class SiteController extends Controller
 	{
 		// renders the view file 'protected/views/site/index.php'
 		// using the default layout 'protected/views/layouts/main.php'
-		$packages = Package::model()->findAll();
+		$packages = Package::model()->findAll(array('condition'=>'account_id = 1', 'limit'=>3));
 
 		$this->render('index', array(
 			'packages' => $packages,

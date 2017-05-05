@@ -13,7 +13,7 @@
 		}
 	?>
 	<h1>
-		Welcome!
+		Welcome <?php echo $user->first_name; ?>!
 		<small>dashboard</small>
 	</h1>
 	<ol class="breadcrumb">

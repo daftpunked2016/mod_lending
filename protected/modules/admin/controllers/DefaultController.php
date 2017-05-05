@@ -6,6 +6,8 @@ class DefaultController extends Controller
 
 	public function actionIndex()
 	{	
+		$account = Account::model()->findByPk(Yii::app()->getModule("admin")->user->id);
+
 		$total_investor = Account::model()->isInvestor()->count();
 		$total_borrower = Account::model()->isBorrower()->count();
 		$total_investment = Loan::model()->isApproved()->count();
@@ -16,6 +18,8 @@ class DefaultController extends Controller
 			'total_borrower' => $total_borrower,
 			'total_investment' => $total_investment,
 			'total_loan' => $total_loan,
+			'account' => $account,
+			'user' => $account->user,
 		));
 	}
 
