@@ -5,3 +5,7 @@
 > ALTER TABLE `user` CHANGE `check_payable_to` `check_payable_to` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT 'For investor only'; 
 > ALTER TABLE `user` CHANGE `province` `province` TINYINT(3) UNSIGNED NOT NULL, CHANGE `city` `city` SMALLINT(7) UNSIGNED NOT NULL; 
 > ALTER TABLE `city` ADD INDEX (`province_id`);
+
+05/15/2017
+> ALTER TABLE `package` CHANGE `interest_rate` `interest_rate` TINYINT(3) UNSIGNED NOT NULL;
+> ALTER TABLE `loan` ADD `date_started` DATE NULL AFTER `status`; 

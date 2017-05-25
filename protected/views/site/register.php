@@ -215,14 +215,14 @@
       </div>
     </div> -->
     <!-- /.col -->
-    <div class="col-md-4 col-xs-6 col-sm-4">
+    <!-- <div class="col-md-4 col-xs-6 col-sm-4"> -->
       <!-- <button type="submit" class="btn btn-primary btn-block btn-flat">Register</button> -->
-      <?php echo CHtml::link('Back', array('site/register'), array('class'=>'btn btn-danger btn-block btn-flat')); ?>
-    </div>
+      <!-- <?php //echo CHtml::link('Back', array('site/register'), array('class'=>'btn btn-danger btn-block btn-flat')); ?> -->
+    <!-- </div> -->
 
-    <div class="col-md-4 col-xs-6 col-sm-4"></div>
+    <!-- <div class="col-md-4 col-xs-6 col-sm-4"></div> -->
 
-    <div class="col-md-4 col-xs-6 col-sm-4">
+    <div class="col-md-4 col-md-offset-4 col-xs-4 col-xs-offset-4">
       <?php echo CHtml::submitButton($account->isNewRecord ? 'Register' : 'Save', array('class'=>'btn btn-primary btn-block btn-flat', 'id'=>'btn-submit')); ?>
     </div>
     <!-- /.col -->

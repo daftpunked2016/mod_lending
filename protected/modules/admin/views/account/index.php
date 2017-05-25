@@ -88,8 +88,8 @@
 	            				</div>
 	            				<div class="col-md-12">
 	            					<div class="pull-right">
-	            						<?php echo CHtml::link('Reset', array('account/index', 'type'=>$type, 'status'=>$status), array('title'=>'Reset Filters', 'class'=>'btn btn-success btn-flat')); ?>
-	            						<button class="btn btn-danger btn-flat" title="Search">
+	            						<?php echo CHtml::link('Reset', array('account/index', 'type'=>$type, 'status'=>$status), array('title'=>'Reset Filters', 'class'=>'btn btn-danger btn-flat')); ?>
+	            						<button class="btn btn-success btn-flat" title="Search">
 		            						Search
 		            					</button>
 	            					</div>

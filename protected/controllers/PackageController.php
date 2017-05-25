@@ -12,7 +12,7 @@ class PackageController extends Controller
 			#Method redirect if search filter is empty
 			if (empty($_GET['search']['amount']) && empty($_GET['search']['interest_rate']) && empty($_GET['search']['months_payable'])) {
 				Yii::app()->user->setFlash('error', 'Please enter atleast 1 search filter.');
-				$this->redirect(array('loan/investments'));
+				$this->redirect(array('package/list'));
 			} else {
 				$search_filters = 1;
 			}

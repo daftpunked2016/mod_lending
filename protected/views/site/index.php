@@ -13,7 +13,18 @@
 							echo $home_data->content;
 						?>
 					</p>
-					<img src="<?php echo Yii::app()->request->baseUrl; ?>/landingpage_assets/images/software-img.png" class="img-responsive" alt="home img">
+					<!-- <img src="<?php //echo Yii::app()->request->baseUrl; ?>/landingpage_assets/images/software-img.png" class="img-responsive" alt="home img"> -->
+					<div class="row" style="padding-top: 50px;">
+						<div class="col-md-4 col-sm-4 wow fadeIn" data-wow-delay="0.3s">
+							<?php echo CHtml::link('<strong>Want to Borrow?</strong>', array('site/investments'), array('class'=>'btn btn-danger btn-block text-uppercase', 'style'=>'border-radius: 0px; border: 1px solid transparent; margin-bottom: 15px;')); ?>
+						</div>
+						<div class="col-md-4 col-sm-4 wow fadeIn" data-wow-delay="0.3s">
+							<?php echo CHtml::link('<strong>Want to Invest?</strong>', '#pricing', array('class'=>'btn btn-warning btn-block text-uppercase', 'style'=>'border-radius: 0px; border: 1px solid transparent; margin-bottom: 15px;')); ?>						
+						</div>
+						<div class="col-md-4 col-sm-4 wow fadeIn" data-wow-delay="0.3s">
+							<?php echo CHtml::link('<strong>Existing user?</strong>', array('site/login'), array('class'=>'btn btn-info btn-block text-uppercase', 'style'=>'border-radius: 0px; border: 1px solid transparent; margin-bottom: 15px;')); ?>
+						</div>
+					</div>
 				</div>
 				<div class="col-md-1"></div>
 			</div>
@@ -112,7 +123,7 @@
 						</div>
 						<ul>
 							<li>
-								<?php $rate = $data->interest_rate * 100; ?>
+								<?php $rate = $data->interest_rate; ?>
 
 								<?php echo $rate; ?>% Interest rate
 							</li>

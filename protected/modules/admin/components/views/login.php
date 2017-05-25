@@ -24,13 +24,13 @@
 
 <div class="form-group has-feedback">
 	<?php echo $form->textField($model,'username', array('class'=>'form-control', 'type'=>'email', 'placeholder'=>'Email')); ?><span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-	<?php echo $form->error($model,'username'); ?>
+	<?php echo $form->error($model,'username', array('class'=>'text-red')); ?>
 	
 </div>
 
 <div class="form-group has-feedback">
   <?php echo $form->passwordField($model,'password', array('class'=>'form-control', 'placeholder'=>'Password')); ?><span class="glyphicon glyphicon-lock form-control-feedback"></span>
-  <?php echo $form->error($model,'password'); ?>
+  <?php echo $form->error($model,'password', array('class'=>'text-red')); ?>
 </div>
 
 <div class="form-group has-feedback">

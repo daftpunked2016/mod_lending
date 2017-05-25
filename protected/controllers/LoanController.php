@@ -11,7 +11,33 @@ class LoanController extends Controller
 
 	public function actionIndex()
 	{
-		$loan_requests = LoanRequest::model()->findAll(array('condition' => 'borrower_id = :aid', 'params'=>array(':aid'=>Yii::app()->user->id)));
+		$condition = array('join'=>'INNER JOIN loan l ON t.loan_id = l.id INNER JOIN package p ON l.package_id = p.id', 'condition'=>'borrower_id = :aid', 'params'=>array(':aid'=>Yii::app()->user->id));
+
+		$search_filters = 0;
+		if (!empty($_GET['search'])) {
+
+			#Method redirect if search filter is empty
+			if (empty($_GET['search']['amount']) && empty($_GET['search']['interest_rate']) && empty($_GET['search']['months_payable'])) {
+				Yii::app()->user->setFlash('error', 'Please enter atleast 1 search filter.');
+				$this->redirect(array('loan/index'));
+			} else {
+				$search_filters = 1;
+			}
+
+			if (!empty($_GET['search']['amount'])) {
+				$condition['condition'] .= " AND p.amount = {$_GET['search']['amount']}";
+			}
+
+			if (!empty($_GET['search']['interest_rate'])) {
+				$condition['condition'] .= " AND p.interest_rate = {$_GET['search']['interest_rate']}";
+			}
+
+			if (!empty($_GET['search']['months_payable'])) {
+				$condition['condition'] .= " AND p.months_payable = {$_GET['search']['months_payable']}";
+			}
+		}
+
+		$loan_requests = LoanRequest::model()->findAll($condition);
 		$loan_requestsDP = new CArrayDataProvider($loan_requests, array(
 			'pagination' => array(
 				'pageSize' => 10
@@ -19,13 +45,40 @@ class LoanController extends Controller
 		));
 
 		$this->render('index', array(
-			'loan_requestsDP' => $loan_requestsDP
+			'loan_requestsDP' => $loan_requestsDP,
+			'search_filters' => $search_filters,
 		));
 	}
 
 	public function actionList()
-	{
-		$loans = Loan::model()->findAll(array('condition' => 'account_id = :aid', 'params'=>array(':aid'=>Yii::app()->user->id)));
+	{	
+		$condition = array('condition' => 't.account_id = :aid', 'params'=>array(':aid'=>Yii::app()->user->id));
+		$search_filters = 0;
+		if (!empty($_GET['search'])) {
+
+			#Method redirect if search filter is empty
+			if (empty($_GET['search']['amount']) && empty($_GET['search']['interest_rate']) && empty($_GET['search']['months_payable'])) {
+				Yii::app()->user->setFlash('error', 'Please enter atleast 1 search filter.');
+				$this->redirect(array('loan/list'));
+			} else {
+				$search_filters = 1;
+			}
+
+			if (!empty($_GET['search']['amount'])) {
+				$condition['condition'] .= " AND package.amount = {$_GET['search']['amount']}";
+			}
+
+			if (!empty($_GET['search']['interest_rate'])) {
+				$condition['condition'] .= " AND package.interest_rate = {$_GET['search']['interest_rate']}";
+			}
+
+			if (!empty($_GET['search']['months_payable'])) {
+				$condition['condition'] .= " AND package.months_payable = {$_GET['search']['months_payable']}";
+			}
+		}
+
+
+		$loans = Loan::model()->with('package')->findAll($condition);
 		$loansDP = new CArrayDataProvider($loans, array(
 			'pagination' => array(
 				'pageSize' => 10
@@ -33,7 +86,8 @@ class LoanController extends Controller
 		));
 
 		$this->render('list', array(
-			'loansDP' => $loansDP
+			'loansDP' => $loansDP,
+			'search_filters' => $search_filters
 		));
 	}
 
@@ -63,7 +117,7 @@ class LoanController extends Controller
 	public function actionInvestments()
 	{
 		#Method validate if investment request is pending
-		$this->check_pending_loan();
+		// $this->check_pending_loan();
 
 		$condition = "";
 		$search_filters = 0;
@@ -78,15 +132,15 @@ class LoanController extends Controller
 			}
 
 			if (!empty($_GET['search']['amount'])) {
-				$condition = " AND package.amount = {$_GET['search']['amount']}";
+				$condition .= " AND package.amount = {$_GET['search']['amount']}";
 			}
 
 			if (!empty($_GET['search']['interest_rate'])) {
-				$condition = " AND package.interest_rate = {$_GET['search']['interest_rate']}";
+				$condition .= " AND package.interest_rate = {$_GET['search']['interest_rate']}";
 			}
 
 			if (!empty($_GET['search']['months_payable'])) {
-				$condition = " AND package.months_payable = {$_GET['search']['months_payable']}";
+				$condition .= " AND package.months_payable = {$_GET['search']['months_payable']}";
 			}
 		}
 
@@ -138,21 +192,29 @@ class LoanController extends Controller
 		$loan_data = Loan::model()->findByPk($id);
 		$package_data = $loan_data->package;
 
-		#viewing variable
-		$result['package_name'] = strtoupper($package_data->package_name);
-		$result['amount'] = number_format($package_data->amount, 2);
-		$result['rate'] = ($package_data->interest_rate * 100)."%";
-		$result['payable_in'] = $package_data->months_payable;
-		$result['service_fee'] = number_format(Loan::model()->getServiceFee($package_data), 2);
-		$result['total'] = "P ".number_format(Loan::model()->getTotal($package_data), 2);
-		$result['per_month_total'] = number_format(Loan::model()->getPerMonthTotal($package_data), 2);
-		$result['payable_to'] = $loan_data->account->user->check_payable_to;
+		$result = Loan::model()->getAmortizationSchedule($loan_data);
 
-		$this->renderPartial('computation', array(
-			'result' => $result,
-			'loan_data' => $loan_data,
-			'viewing' => $viewing,			
-		));
+		#viewing variable
+		$result['loan_summary']['package_name'] = strtoupper($package_data->package_name);
+		$result['loan_summary']['amount'] = number_format($package_data->amount, 2);
+		$result['loan_summary']['payable_in'] = $package_data->months_payable;
+		
+		if ($viewing) {
+			$result['loan_summary']['payable_to'] = $loan_data->account->user->check_payable_to;
+		}
+
+		#Method check if user is not log in
+		if (!empty(Yii::app()->user->id)) {
+			$this->renderPartial('computation', array(
+				'result' => $result['loan_summary'],
+				'loan_data' => $loan_data,
+				'viewing' => $viewing,			
+			));
+		} else {
+			$this->renderPartial('computation_not_login', array(
+				'result' => $result['loan_summary']
+			));
+		}
 	}
 
 	public function actionCancelLoan($id)
@@ -175,9 +237,34 @@ class LoanController extends Controller
 	public function actionOpen()
 	{
 		#Method check pending loan
-		$this->check_pending_loan();
+		// $this->check_pending_loan();
 
-		$open_request_data = OpenRequest::model()->findAll(array('condition'=>'borrower_id = :bid', 'params'=>array(':bid'=>Yii::app()->user->id)));
+		$condition = array('condition'=>'borrower_id = :bid', 'params'=>array(':bid'=>Yii::app()->user->id));
+		$search_filters = 0;
+		if (!empty($_GET['search'])) {
+
+			#Method redirect if search filter is empty
+			if (empty($_GET['search']['amount']) && empty($_GET['search']['interest_rate']) && empty($_GET['search']['months_payable'])) {
+				Yii::app()->user->setFlash('error', 'Please enter atleast 1 search filter.');
+				$this->redirect(array('loan/open'));
+			} else {
+				$search_filters = 1;
+			}
+
+			if (!empty($_GET['search']['amount'])) {
+				$condition['condition'] .= " AND package.amount = {$_GET['search']['amount']}";
+			}
+
+			if (!empty($_GET['search']['interest_rate'])) {
+				$condition['condition'] .= " AND package.interest_rate = {$_GET['search']['interest_rate']}";
+			}
+
+			if (!empty($_GET['search']['months_payable'])) {
+				$condition['condition'] .= " AND package.months_payable = {$_GET['search']['months_payable']}";
+			}
+		}
+
+		$open_request_data = OpenRequest::model()->with('package')->findAll($condition);
 		$open_requestDP = new CArrayDataProvider($open_request_data, array(
 			'pagination' => array(
 				'pageSize' => 10
@@ -190,7 +277,7 @@ class LoanController extends Controller
 
 		if (isset($_POST['Package'])) {
 			$package->attributes = $_POST['Package'];
-			$package->package_name = "CUSTOM PACKAGE";
+			$package->package_name = "CUSTOMIZED";
 			$package->account_id = Yii::app()->user->id;
 
 			$valid = $package->validate();
@@ -211,7 +298,7 @@ class LoanController extends Controller
 				} catch (Exception $e) {
 					$transaction->rollback();
 					Yii::app()->user->setFlash('error', 'Posting of Loan Request failed. Please contact system developer.');
-					$this->redirect(array('loan/index'));
+					$this->redirect(array('loan/open'));
 				}
 			} else {
 				Yii::app()->user->setFlash('error', 'Validation Failed! Please check required fields and try again.');
@@ -220,7 +307,8 @@ class LoanController extends Controller
 
 		$this->render('open_request', array(
 			'open_requestDP' => $open_requestDP,
-			'package' => $package
+			'package' => $package,
+			'search_filters' => $search_filters
 		));
 	}
 

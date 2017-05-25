@@ -65,6 +65,11 @@ class SiteController extends Controller
 				$account->account_type = $type;
 				$user->attributes = $_POST['User'];
 
+				#Method set business_type_id = 0 if investor
+				if ($type == "I") {
+					$user->business_type_id = 0;
+				}
+
 				$valid = $account->validate();
 				$valid = $user->validate() && $valid;
 
@@ -139,6 +144,32 @@ class SiteController extends Controller
 		}
 	}
 
+	#This page is only intended to Borrowers Account
+	public function actionInvestments()
+	{
+		$this->layout = "/layouts/top_layout";
+
+		#Method restrict investor to gettings into this page
+		if (!empty(Yii::app()->user->id)) {
+			$account = Account::model()->findByPk(Yii::app()->user->id);
+
+			if ($account->account_type == "I") {
+				$this->redirect(array('account/dashboard'));
+			}
+		}
+
+		$investments = Loan::model()->isApproved()->with('package')->findAll(array('condition'=>'t.id NOT IN (SELECT loan_id FROM loan_request WHERE status IN ("A", "P"))'));
+		$investmentsDP = new CArrayDataProvider($investments, array(
+			'pagination' => array(
+				'pageSize' => 10
+			)
+		));
+
+		$this->render('investments', array(
+			'investmentsDP' => $investmentsDP
+		));
+	}
+
 	/**
 	 * This is the action to handle external exceptions.
 	 */
@@ -159,6 +190,11 @@ class SiteController extends Controller
 	public function actionLogin()
 	{
 		$this->layout = "/layouts/login";
+
+		#Method redirect if user is already logged in
+		if (!empty(Yii::app()->user->id)) {
+			$this->redirect(array('account/dashboard'));
+		}
 
 		$model = new LoginForm;
 
@@ -187,8 +223,6 @@ class SiteController extends Controller
 	 */
 	public function actionLogout()
 	{
-		// Yii::app()->user->logout();
-		// $this->redirect(Yii::app()->homeUrl);
 		if(isset($_SESSION['token'])) {
 			unset($_SESSION['token']);
 		}
@@ -196,5 +230,66 @@ class SiteController extends Controller
 		Yii::app()->user->logout(false);
 		Yii::app()->user->setFlash('success','You have successfully logged out your Account.');
 		$this->redirect('login');
+	}
+
+	public function actionTest()
+	{
+		$loan_data = Loan::model()->findByPK(61);
+		$package_data = Package::model()->findByPk($loan_data->package_id);
+		$start_date = $loan_data->date_started;
+
+		$interest_rate = ($package_data->interest_rate / 100) * $package_data->months_payable;
+
+		#PMT
+		$interest = $interest_rate / 12;
+		$monthly_amortization = $interest * -$package_data->amount * pow((1 + $interest), $package_data->months_payable) / (1 - pow((1 + $interest), $package_data->months_payable));
+
+		#AMORIZATION SCHEDULING
+		for ($i=1; $i <= $package_data->months_payable; $i++) { 
+			// if ($i === 1) {
+			// 	$result['schedule'][$i]['payment_date'] = date('m/d/Y', strtotime($start_date));
+			// } else {
+			// 	$result['schedule'][$i]['payment_date'] = date('m/d/Y', strtotime($start_date. "+ ".($i-1)." month"));
+			// }
+
+			$result['schedule'][$i]['payment_date'] = date('Y/m/d', strtotime($start_date. "+ ".$i." month"));
+
+			$result['schedule'][$i]['scheduled_payment'] = number_format($monthly_amortization, 2);
+		}
+
+		$loan_balance = $package_data->amount;
+		$total_interest = 0;
+		foreach ($result['schedule'] as $key => $value) {
+			$result['schedule'][$key]['loan_balance'] = number_format($loan_balance, 2);
+
+			$principal = $monthly_amortization - ($loan_balance * ($interest_rate / 12));
+			$result['schedule'][$key]['principal'] = number_format($principal, 2);
+
+			$interest_schedule = $loan_balance * ($interest_rate / 12);
+			$result['schedule'][$key]['interest'] = number_format($interest_schedule, 2);
+
+			$ending_balance = $loan_balance - $principal;
+			$result['schedule'][$key]['ending_balance'] = number_format($ending_balance, 2);
+
+			$total_interest += $interest_schedule;
+			$result['schedule'][$key]['cumulative_interest'] = number_format($total_interest, 2);			
+
+			$loan_balance = $ending_balance;
+		}
+
+		$one_time_service_fee = ($package_data->amount + $total_interest) * 0.015;
+
+		#LOAN SUMMARY
+		$result['loan_summary']['monthly_amortization'] = number_format($monthly_amortization, 2);
+		$result['loan_summary']['months_payable'] = $package_data->months_payable;
+		$result['loan_summary']['total_interest'] = number_format($total_interest, 2);
+		$result['loan_summary']['interest_rate'] = $package_data->interest_rate;
+		$result['loan_summary']['total_payment'] = number_format($package_data->amount + $total_interest, 2); #add total interest here
+		$result['loan_summary']['one_time_service_fee'] = number_format($one_time_service_fee, 2);
+
+		echo "<pre>";
+		print_r($result);
+		echo "</pre>";
+		exit;
 	}
 }

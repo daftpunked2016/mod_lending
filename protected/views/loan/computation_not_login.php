@@ -36,16 +36,9 @@
 		</tr>
 	</table>
 </div>
-<?php if ($viewing == false): ?>
-	<div class="modal-footer">
-		<div class="pull-left">
-			<?php echo CHtml::link('Close', 'javascript:void(0);', array('data-dismiss'=>'modal', 'class'=>'btn btn-danger btn-flat')); ?>
-		</div>
-		<div class="pull-right">
-			<?php echo CHtml::link('Apply', array('loan/apply', 'loan_id'=>$loan_data->id), array('class'=>'btn btn-danger btn-flat btn-apply', 'title'=>'Apply Loan')); ?>
-		</div>
-	</div>
-<?php endif ?>
+<div class="modal-footer">
+You need to login your account first. Click <?php echo CHtml::link('<strong>HERE</strong>', array('site/login'), array('class'=>'text-red')); ?> to proceed. Thank you!
+</div>
 
 <script type="text/javascript">
 $(function() {

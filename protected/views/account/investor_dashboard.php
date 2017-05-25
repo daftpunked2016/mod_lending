@@ -33,14 +33,14 @@
 			<!-- small box -->
 			<div class="small-box bg-aqua">
 				<div class="inner">
-					<h3>150</h3>
+					<h3><?php echo CHtml::encode($inbox_count); ?></h3>
 
-					<p>New Orders</p>
+					<p>Inbox</p>
 				</div>
 				<div class="icon">
-					<i class="ion ion-bag"></i>
+					<i class="fa fa-envelope"></i>
 				</div>
-				<a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+				<?php echo CHtml::link('More info <i class="fa fa-arrow-circle-right"></i>', array('message/index', 'folder'=>'inbox'), array('class'=>'small-box-footer')); ?>
 			</div>
 		</div>
 		<!-- ./col -->
@@ -48,14 +48,14 @@
 			<!-- small box -->
 			<div class="small-box bg-green">
 				<div class="inner">
-					<h3>53<sup style="font-size: 20px">%</sup></h3>
+					<h3><?php echo CHtml::encode($packages_count); ?></h3>
 
-					<p>Bounce Rate</p>
+					<p>Available Packages</p>
 				</div>
 				<div class="icon">
-					<i class="ion ion-stats-bars"></i>
+					<i class="fa fa-briefcase"></i>
 				</div>
-				<a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+				<?php echo CHtml::link('More info <i class="fa fa-arrow-circle-right"></i>', array('package/list'), array('class'=>'small-box-footer')); ?>
 			</div>
 		</div>
 		<!-- ./col -->
@@ -63,14 +63,14 @@
 			<!-- small box -->
 			<div class="small-box bg-yellow">
 				<div class="inner">
-					<h3>44</h3>
+					<h3><?php echo CHtml::encode($investment_count) ?></h3>
 
-					<p>User Registrations</p>
+					<p>Investments</p>
 				</div>
 				<div class="icon">
-					<i class="ion ion-person-add"></i>
+					<i class="fa fa-share"></i>
 				</div>
-				<a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+				<?php echo CHtml::link('More info <i class="fa fa-arrow-circle-right"></i>', array('loan/list'), array('class'=>'small-box-footer')); ?>
 			</div>
 		</div>
 		<!-- ./col -->
@@ -78,14 +78,14 @@
 			<!-- small box -->
 			<div class="small-box bg-red">
 				<div class="inner">
-					<h3>65</h3>
+					<h3><?php echo CHtml::encode($open_count); ?></h3>
 
-					<p>Unique Visitors</p>
+					<p>Loan Request</p>
 				</div>
 				<div class="icon">
-					<i class="ion ion-pie-graph"></i>
+					<i class="fa fa-sign-out"></i>
 				</div>
-				<a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+				<?php echo CHtml::link('More info <i class="fa fa-arrow-circle-right"></i>', array('loan/openlist'), array('class'=>'small-box-footer')); ?>
 			</div>
 		</div>
 		<!-- ./col -->

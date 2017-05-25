@@ -9,13 +9,29 @@ class AccountController extends Controller
 		$account = Account::model()->findByPk(Yii::app()->user->id);
 		$account_type = $account->account_type;
 
-		if ($account_type == "I") {
-			$this->render('investor_dashboard', array(
+		$inbox_count = Message::model()->isSent()->isNotDeleted()->count(array('condition'=>'to_account_id = :account_id', 'params'=>array(':account_id'=>$account->id)));
 
+		if ($account_type == "I") {
+			$packages_count = Package::model()->adminPackages()->count();
+			$investment_count = Loan::model()->count(array('condition' => 'account_id = :aid', 'params'=>array(':aid'=>$account->id)));
+			$open_count = OpenRequest::model()->isOpen()->isApproved()->count();
+
+			$this->render('investor_dashboard', array(
+				'inbox_count' => $inbox_count,
+				'packages_count' => $packages_count,
+				'investment_count' => $investment_count,
+				'open_count' => $open_count,
 			));
 		} else {
-			$this->render('borrower_dashboard', array(
+			$investments_count = Loan::model()->isApproved()->count(array('condition'=>'t.id NOT IN (SELECT loan_id FROM loan_request WHERE status IN ("A", "P"))'));
+			$loan_count = LoanRequest::model()->count(array('condition' => 'borrower_id = :aid', 'params'=>array(':aid'=>$account->id)));
+			$open_count = OpenRequest::model()->count(array('condition'=>'borrower_id = :bid', 'params'=>array(':bid'=>$account->id)));
 
+			$this->render('borrower_dashboard', array(
+				'inbox_count' => $inbox_count,
+				'investments_count' => $investments_count,
+				'loan_count' => $loan_count,
+				'open_count' => $open_count
 			));
 		}
 	}

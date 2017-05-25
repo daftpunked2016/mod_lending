@@ -55,8 +55,8 @@
 								<input type="number" class="form-control" name="search[months_payable]" value="<?php if(!empty($_GET['search']['months_payable'])) { echo $_GET['search']['months_payable']; } ?>" placeholder="Months Payable" />
 							</div>
 							<div class="col-md-3">
-								<?php echo CHtml::link('<span class="fa fa-search"></span>', 'javascript:void(0);', array('class'=>'btn btn-primary btn-flat', 'title'=>'Search', 'id'=>'btn-search')); ?>
-								<?php echo CHtml::link('<span class="fa fa-refresh"></span>', array('package/list'), array('class'=>'btn btn-danger btn-flat', 'title'=>'Reset Filters')); ?>
+								<?php echo CHtml::link('<span class="fa fa-refresh"></span> Reset', array('package/list'), array('class'=>'btn btn-danger btn-flat', 'title'=>'Reset Filters')); ?>
+								<?php echo CHtml::link('<span class="fa fa-search"></span> Search', 'javascript:void(0);', array('class'=>'btn btn-success btn-flat', 'title'=>'Search', 'id'=>'btn-search')); ?>
 							</div>
 						</div>
 					</form>
@@ -84,7 +84,7 @@
 								<div class="col-sm-4 border-right">
 									<div class="description-block">
 										<h5 class="description-header">
-											<?php echo $val->interest_rate * 100; ?>
+											<?php echo $val->interest_rate; ?>
 											<small>%</small>
 										</h5>
 										<small class="description-text">INTEREST</small>

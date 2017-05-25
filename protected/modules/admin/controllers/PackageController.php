@@ -28,7 +28,8 @@ class PackageController extends Controller
 
 		if (isset($_POST['Package'])) {
 			$package->attributes = $_POST['Package'];
-
+			$package->account_id = Yii::app()->getModule('admin')->user->id;
+			
 			$valid = $package->validate();
 
 			if ($valid) {

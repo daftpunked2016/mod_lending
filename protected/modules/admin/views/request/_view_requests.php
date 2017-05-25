@@ -1,10 +1,18 @@
-<?php $package = $data->loan->package; ?>
+<?php
+	$package = $data->loan->package;
+	$user = $data->account->user;
+?>
 
 <tr>
-	<td><strong><?php echo CHtml::encode($data->account->user->id_name); ?></strong></td>
+	<td>
+		<?php echo CHtml::encode($user->first_name)." ".CHtml::encode($user->last_name); ?>
+		<small>
+			(<strong><?php echo CHtml::encode($user->id_name); ?></strong>)
+		</small>
+	</td>
 	<td><?php echo CHtml::encode(strtoupper($package->package_name)); ?></td>
-	<td><?php echo CHtml::encode($package->interest_rate * 100); ?>%</td>
-	<td><?php echo CHtml::encode($package->months_payable); ?></td>
+	<td>P <?php echo CHtml::encode(number_format($package->amount, 2)); ?> <b>|</b> <?php echo CHtml::encode($package->interest_rate); ?>% <b>|</b> <?php echo CHtml::encode($package->months_payable); ?> mos.</td>
+	<td><?php echo CHtml::encode(date('M. d, Y', strtotime($data->date_created))) ?></td>
 	<td>
 		<?php
 			switch ($data->status) {
@@ -31,14 +39,20 @@
           </button>
           <ul class="dropdown-menu pull-right" role="menu">
             <li>
-            	<?php echo CHtml::link('<span class="fa fa-search"></span> View', 'javascript:void(0);', array('class'=>'view-account', 'data-toggle'=>'modal', 'data-target'=>'.bs-example-modal-lg', 'data-url'=>Yii::app()->createUrl('admin/account/view', array('id'=>$data->borrower_id)))); ?>
+            	<?php echo CHtml::link('<span class="fa fa-search"></span> View Account', 'javascript:void(0);', array('class'=>'view-account', 'data-toggle'=>'modal', 'data-target'=>'.bs-example-modal-lg', 'data-url'=>Yii::app()->createUrl('admin/account/view', array('id'=>$data->borrower_id)))); ?>
             </li>
+            <?php if ($data->status == "A"): ?>
+            	<li>
+            		<?php echo CHtml::link('<span class="fa fa-calendar"></span> View Schedule', 'javascript:void(0);', array('class'=>'view-schedule', 'data-toggle'=>'modal', 'data-target'=>'.bs-example-modal-lg', 'data-url'=>Yii::app()->createUrl('admin/request/schedule', array('id'=>$data->id)))); ?>
+            	</li>
+            <?php endif; ?>
             <li class="divider"></li>
             <li>
 	            <?php
 		            switch ($data->status) {
 		            	case 'P':
-		            		echo CHtml::link('<span class="fa fa-check"></span> Approve', array('request/approve', 'id'=>$data->id), array('confirm'=>'Are you sure you want to Approve this Request?', 'title'=>'Approve Request'));
+		            		// echo CHtml::link('<span class="fa fa-check"></span> Approve', array('request/approve', 'id'=>$data->id), array('confirm'=>'Are you sure you want to Approve this Request?', 'title'=>'Approve Request'));
+		            		echo CHtml::link('<span class="fa fa-check"></span> Approve', 'javascript:void(0);', array('data-toggle'=>'modal', 'data-target'=>'.bs-example-modal-sm', 'title'=>'Approve Request', 'class'=>'approve-report', 'data-url'=>Yii::app()->createUrl('admin/request/approve', array('id'=>$data->id))));
 	            			echo CHtml::link('<span class="fa fa-times"></span> Reject', array('request/reject', 'id'=>$data->id), array('confirm'=>'Are you sure you want to Reject this Request?', 'title'=>'Reject Request'));
 		            		break;
 		            	case 'A':

@@ -51,6 +51,7 @@ class OpenRequest extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'account' => array(self::BELONGS_TO, 'Account', 'borrower_id'),
+			'user' => array(self::BELONGS_TO, 'User', 'borrower_id'),
 			'package' => array(self::BELONGS_TO, 'Package', 'package_id'),
 			'loan' => array(self::BELONGS_TO, 'Loan', 'loan_id'),
 		);

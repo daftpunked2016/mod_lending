@@ -21,7 +21,7 @@
 <?php 
 	$form=$this->beginWidget('CActiveForm', array(
 		'id'=>'login-form',
-		'enableClientValidation'=>true,
+		'enableClientValidation'=>false,
 		'clientOptions'=>array(
 			'validateOnSubmit'=>true,
 		),
@@ -66,4 +66,5 @@
 </div>
 
 <a href="#">I forgot my password</a><br> -->
-<?php echo CHtml::link('Register here for membership', array('site/register')); ?>
+<!-- <?php //echo CHtml::link('Register here to Register', array('site/register')); ?> -->
+<?php echo CHtml::link('Register here to Register', array('site/register', 'type'=>'B')); ?>

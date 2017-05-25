@@ -46,5 +46,5 @@
 </div>
 
 <div class="text-center">
-	<?php echo CHtml::link('I already have a membership', array('site/login')); ?>
+	<?php echo CHtml::link('I already have an Account', array('site/login')); ?>
 </div>

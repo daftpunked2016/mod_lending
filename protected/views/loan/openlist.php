@@ -55,8 +55,8 @@
 								<input type="number" class="form-control" name="search[months_payable]" value="<?php if(!empty($_GET['search']['months_payable'])) { echo $_GET['search']['months_payable']; } ?>" placeholder="Months Payable" />
 							</div>
 							<div class="col-md-3">
-								<?php echo CHtml::link('<span class="fa fa-search"></span>', 'javascript:void(0);', array('class'=>'btn btn-primary btn-flat', 'title'=>'Search', 'id'=>'btn-search')); ?>
-								<?php echo CHtml::link('<span class="fa fa-refresh"></span>', array('loan/openlist'), array('class'=>'btn btn-danger btn-flat', 'title'=>'Reset Filters')); ?>
+								<?php echo CHtml::link('<span class="fa fa-refresh"></span> Reset', array('loan/openlist'), array('class'=>'btn btn-danger btn-flat', 'title'=>'Reset Filters')); ?>
+								<?php echo CHtml::link('<span class="fa fa-search"></span> Search', 'javascript:void(0);', array('class'=>'btn btn-success btn-flat', 'title'=>'Search', 'id'=>'btn-search')); ?>
 							</div>
 						</div>
 					</form>

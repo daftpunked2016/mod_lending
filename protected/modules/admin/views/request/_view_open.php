@@ -1,10 +1,17 @@
-<?php $package = $data->package; ?>
+<?php 
+	$package = $data->package;
+	$user = $data->account->user;
+?>
 
 <tr>
-	<td><b><?php echo CHtml::encode($data->account->user->id_name); ?></b></td>
-	<td>P <?php echo CHtml::encode(number_format($package->amount, 2)); ?></td>
-	<td><?php echo CHtml::encode($package->interest_rate * 100); ?>%</td>
-	<td><?php echo CHtml::encode($package->months_payable); ?> month/s</td>
+	<td>
+		<?php echo CHtml::encode($user->first_name)." ".CHtml::encode($user->last_name); ?>
+		<small>
+			(<strong><?php echo CHtml::encode($user->id_name); ?></strong>)
+		</small>
+	</td>
+	<td>P <?php echo CHtml::encode(number_format($package->amount, 2)); ?> <b>|</b> <?php echo CHtml::encode($package->interest_rate); ?>% <b>|</b> <?php echo CHtml::encode($package->months_payable); ?> mos.</td>
+	<td><?php echo CHtml::encode(date('M. d, Y', strtotime($data->date_created))) ?></td>
 	<td>
 		<?php
 			if ($data->loan_id) {

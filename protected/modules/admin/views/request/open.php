@@ -28,6 +28,76 @@
 </section>
 
 <section class="content">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="box box-danger collapsed-box">
+				<div class="box-header with-border">
+					<h4 class="box-title">
+						Search Filters
+					</h4>
+
+					<div class="box-tools pull-right">
+						<button type="button" class="btn btn-box-tool" data-widget="collapse">
+							<i class="fa fa-plus"></i>
+						</button>
+					</div>
+				</div>
+				<div class="box-body" style="<?php if($search_filters != 0) { echo "display: block;"; } ?>">
+					<form id="search-form" method="get" action="<?php echo Yii::app()->createUrl('admin/request/open'); ?>">
+						<div class="row">
+							<div class="col-md-3">
+								<div class="form-group">
+									<input type="text" class="form-control" name="search[name]" value="<?php if(!empty($_GET['search']['name'])) { echo $_GET['search']['name']; } ?>" placeholder="Name" />
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<input type="number" class="form-control" min=0 name="search[amount]" value="<?php if(!empty($_GET['search']['amount'])) { echo $_GET['search']['amount']; } ?>" placeholder="Amount" />
+								</div>
+							</div>
+							<div class="col-md-2">
+								<div class="form-group">
+									<input type="number" class="form-control" name="search[interest_rate]" value="<?php if(!empty($_GET['search']['interest_rate'])) { echo $_GET['search']['interest_rate']; } ?>" placeholder="Interest Rate" />
+								</div>
+							</div>
+							<div class="col-md-2">
+								<div class="form-group">
+									<input type="number" class="form-control" min=1 name="search[months_payable]" value="<?php if(!empty($_GET['search']['months_payable'])) { echo $_GET['search']['months_payable']; } ?>" placeholder="Months Payable" />
+								</div>
+							</div>
+							<div class="col-md-2">
+								<div class="form-group">
+									<?php
+										$this->widget('zii.widgets.jui.CJuiDatePicker',array(
+										    'name'=>'search[date_created]',
+										    // additional javascript options for the date picker plugin
+										    'options'=>array(
+										        'showAnim'=>'fold',
+										        'dateFormat' => 'yy-mm-dd',
+										    ),
+										    'htmlOptions'=>array(
+										        'class'=>'form-control',
+										        'placeholder'=>'Date Applied',
+										    ),
+										));
+									?>
+								</div>
+							</div>
+
+							<br></br>
+							<div class="col-md-3">
+								<div class="form-group">
+									<?php echo CHtml::link('Reset', array('request/open'), array('class'=>'btn btn-danger btn-flat', 'title'=>'Reset Filters')); ?>
+									<?php echo CHtml::link('Search', 'javascript:void(0);', array('class'=>'btn btn-success btn-flat', 'title'=>'Search', 'id'=>'btn-search')); ?>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<div class="box box-solid">
 		<div class="box-body">
 			<?php  
@@ -38,9 +108,8 @@
 					<table id=\"example1\" class=\"table table-bordered table-hover\">
 						<thead class='panel-heading'>
 							<th>SYSTEM ID</th>
-							<th>AMOUNT</th>
-							<th>INTEREST RATE</th>
-							<th>MONTHS PAYABLE</th>
+							<th><small>AMOUNT</small> | <small>INTEREST RATE</small> | <small>MONTHS PAYABLE</small></th>
+							<th>DATE APPLIED</th>
 							<th>INVITATION STATUS</th>
 							<th>STATUS</th>
 							<th class='text-center' width='15%'>Actions</th>
@@ -50,7 +119,7 @@
 						</tbody>
 					</table>
 					{pager}",
-					'emptyText' => "<tr><td class='text-center' colspan=\"7\">No available entries</td></tr>",
+					'emptyText' => "<tr><td class='text-center' colspan=\"6\">No available entries</td></tr>",
 				));
 			?>
 		</div>
@@ -70,6 +139,10 @@
 $(function() {
 	$('.request-open').addClass('active');
 
+	$('#btn-search').click(function() {
+		$('#search-form').submit();
+	});
+	
 	$('.view-account').click(function() {
 		var url = $(this).data('url');
 
